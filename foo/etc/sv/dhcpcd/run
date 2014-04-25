@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Starting dhcpcd..."
+exec /usr/sbin/dhcpcd -q -B 2>&1

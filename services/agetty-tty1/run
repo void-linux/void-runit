@@ -1,0 +1,3 @@
+#!/bin/sh
+tty=${PWD##*-}
+exec setsid /sbin/agetty -8 -s 38400 $([ $tty = tty1 ] && echo --noclear) $tty linux

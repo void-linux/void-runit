@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Starting ntpd..."
+exec ntpd -g -u ntpd:ntpd -n

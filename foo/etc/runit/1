@@ -1,0 +1,99 @@
+#!/bin/sh
+# vim: set ts=4 sw=4 et:
+
+PATH=/usr/bin:/usr/sbin
+
+echo "Welcome to Void!"
+
+. /etc/rc.conf
+
+echo "Mounting pseudo-filesystems..."
+
+mountpoint -q /proc || mount -t proc proc /proc -o nosuid,noexec,nodev
+mountpoint -q /sys || mount -t sysfs sys /sys -o nosuid,noexec,nodev
+mountpoint -q /run || mount -t tmpfs run /run -o mode=0755,nosuid,nodev
+mountpoint -q /dev || mount -t devtmpfs dev /dev -o mode=0755,nosuid
+
+mkdir -p -m0755 /run/runit /run/lvm /run/user /dev/pts /dev/shm
+mountpoint -q /dev/pts || mount -n -t devpts devpts /dev/pts -o mode=0620,gid=5,nosuid,noexec
+mountpoint -q /dev/shm || mount -n -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
+
+echo "Remounting rootfs read-only..."
+mount -o remount,ro /
+
+echo "Setting up console fonts..."
+for i in /dev/tty[0-6]; do
+    unicode_start < $i
+    [ -n "$CONSOLEFONT" ] && setfont ${CONSOLEMAP:+-m $CONSOLEMAP} $CONSOLEFONT -C $i
+done
+
+echo "Loading keymap ${KEYMAP:-us}..."
+loadkeys -q -u ${KEYMAP:-us}
+
+if [ -n "$HARDWARECLOCK" ]; then
+    echo "Setting up RTC to ${HARDWARECLOCK}..."
+    TZ=$TIMEZONE hwclock --systz \
+        ${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z) --noadjfile}
+fi
+
+if [ -x /usr/lib/systemd/systemd-udevd ]; then
+    _udevd=/usr/lib/systemd/systemd-udevd
+elif [ -x /usr/sbin/udevd ]; then
+    _udevd=/usr/sbin/udevd
+else
+    echo "WARNING: cannot find udevd!"
+fi
+
+if [ -n "${_udevd}" ]; then
+    echo "Starting udevd and waiting for devices to settle..."
+    ${_udevd} --daemon
+    udevadm trigger --action=add --type=subsystems
+    udevadm trigger --action=add --type=devices
+    udevadm settle
+fi
+
+echo "Setting up loopback interface..."
+ip link set up dev lo
+
+echo "Setting up hostname..."
+if [ -n "$HOSTNAME" ]; then
+    echo "$HOSTNAME" > /proc/sys/kernel/hostname
+elif [ -r /etc/hostname ]; then
+    cat /etc/hostname > /proc/sys/kernel/hostname
+fi
+
+echo "Checking filesystems..."
+fsck -A -T -a -t noopts=_netdev
+
+echo "Mounting rootfs read-write..."
+mount -o remount,rw /
+
+echo "Mounting all non-network filesystems..."
+mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev
+
+echo "Initializing swap..."
+swapon -a
+
+if [ -n "$TIMEZONE" ]; then
+    echo "Setting up timezone to ${TIMEZONE}..."
+    ln -sf "/usr/share/zoneinfo/$TIMEZONE" /etc/localtime
+fi
+
+echo "Initializing random seed..."
+cp /var/lib/random-seed /dev/urandom >/dev/null 2>&1 || true
+( umask 077; dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 >/dev/null 2>&1 )
+
+install -m0664 -o root -g utmp /dev/null /run/utmp
+rm -f /etc/nologin /forcefsck /forcequotacheck /fastboot
+
+if [ -n "$MODULES" ]; then
+    echo "Loading kernel modules..."
+    modprobe -ab ${MODULES}
+fi
+
+dmesg >/var/log/dmesg.log
+
+install -m0 /dev/null /etc/runit/reboot
+install -m0 /dev/null /etc/runit/stopit
+
+echo "Initialization complete, starting services..."

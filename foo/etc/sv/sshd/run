@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Starting sshd..."
+/usr/bin/ssh-keygen -A # Will generate host keys if they don't already exist
+exec /usr/sbin/sshd -D
