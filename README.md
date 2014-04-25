@@ -18,7 +18,7 @@ and then update GRUB's configuration file:
 
 At this moment there's no halt/reboot/shutdown utilities, but you can send the appropiate signal to `runit-init(8)`:
 
-    # init 0 [shutdown]
-    # init 6 [reboot]
+    # runit-init 0 [shutdown]
+    # runit-init 6 [reboot]
     
 Feel free to send patches and contribute with improvments and/or new services!
