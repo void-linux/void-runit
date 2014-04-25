@@ -1,3 +1,0 @@
-#!/bin/sh
-tty=${PWD##*-}
-exec setsid /sbin/agetty -8 -s 9600 --noclear $tty linux

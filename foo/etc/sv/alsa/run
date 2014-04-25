@@ -1,4 +1,0 @@
-#!/bin/sh
-set -e
-/usr/bin/alsactl restore
-exec chpst -b alsa pause
