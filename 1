@@ -49,10 +49,10 @@ msg "Setting up ttys to unicode mode...\n"
 for i in /dev/tty[0-6]; do
     unicode_start < $i
 done
-if [ -n "$CONSOLEFONT" ]; then
-    msg "Setting up ttys font to '${CONSOLEFONT}'...\n"
+if [ -n "$FONT" ]; then
+    msg "Setting up ttys font to '${FONT}'...\n"
     for i in /dev/tty[0-6]; do
-        setfont ${CONSOLEMAP:+-m $CONSOLEMAP} $CONSOLEFONT -C $i
+        setfont ${FONT_MAP:+-m $FONT_MAP} ${FONT_UNIMAP:+-u $FONT_UNIMAP} $FONT -C $i
     done
 fi
 
