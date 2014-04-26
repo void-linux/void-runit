@@ -11,15 +11,12 @@ while getopts akrhPHfFnct: opt; do
   case "$opt" in
     a|n|H) echo "-$opt is not implemented" >/dev/stderr; exit 1;;
     t) ;;
-     
     f) touch /fastboot;;
     F) touch /forcefsck;;
-    
     k) action=true;;
     c) action=cancel;;
     h|P) action=halt;;
     r) action=reboot;;
-
     [?]) echo "Usage: shutdown [-fF] [-kchPr] time [warning message]" >/dev/stderr; exit 1;;
   esac
 done
