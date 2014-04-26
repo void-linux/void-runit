@@ -19,3 +19,6 @@ install:
 	install -m644 rc.conf ${DESTDIR}/etc
 	cp -aP runsvdir/* ${DESTDIR}/etc/runit/runsvdir/
 	cp -aP services/* ${DESTDIR}/etc/sv/
+
+clean:
+	-rm -f halt pause
