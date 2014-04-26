@@ -1,0 +1,39 @@
+.Dd September 27, 2012
+.Dt PAUSE 1
+.Os Linux
+.Sh NAME
+.Nm pause
+.Nd don't exit, efficiently
+.Sh SYNOPSIS
+.Nm pause
+.Sh DESCRIPTION
+.Nm pause
+waits to be terminated by a signal.
+It can be used when service supervision is used but there is no
+long-running program to supervise.
+.Nm pause
+uses minimal system resources.
+.Sh EXAMPLES
+Setting up a static IP address with
+.Xr plugsv 8 .
+.Pp
+.Pa /etc/netsv/eth0/run :
+.Bd -literal -offset indent
+#!/bin/sh
+ip link set eth0 up
+ip addr add 192.0.2.1/24 dev eth0
+exec pause
+.Ed
+.Pp
+.Pa /etc/netsv/eth0/finish :
+.Bd -literal -offset indent
+#!/bin/sh
+ip addr del 192.0.2.1/24 dev eth0
+ip link set eth0 down
+.Ed
+.Sh SEE ALSO
+.Xr sleep 1 ,
+.Xr pause 3
+.Sh AUTHOR
+.An Christian Neukirchen ,
+.Mt chneukirchen@gmail.com .

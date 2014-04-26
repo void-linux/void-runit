@@ -2,6 +2,9 @@
 
 This repository contains the runit init scripts for the Void Linux distribution.
 
+This is loosely based on https://github.com/chneukirchen/ignite but with the
+difference that I'm trying to avoid the bash dependency.
+
 ### How to use it
 
     # xbps-install -Sy runit-void
