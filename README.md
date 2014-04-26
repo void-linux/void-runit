@@ -19,4 +19,22 @@ and then update GRUB's configuration file:
 
     # update-grub
 
+reboot and runit will kick in and start services in "default" runlevel (multi-user).
+
+To see enabled services for "current" runlevel:
+
+    $ ls /var/service
+
+To see available runlevels (default and single, which just runs sulogin):
+
+    $ ls /etc/runit/runsvdir
+
+To enable and start a service:
+
+    $ ln -s /etc/sv/<service> /var/service
+
+To disable and remove a service:
+
+    $ rm -f /var/service/<service>
+
 Feel free to send patches and contribute with improvments and/or new services!
