@@ -9,6 +9,7 @@ install:
 	install -d ${DESTDIR}/${PREFIX}/bin
 	install -m755 halt ${DESTDIR}/${PREFIX}/bin
 	install -m755 pause ${DESTDIR}/${PREFIX}/bin
+	install -m755 shutdown.sh ${DESTDIR}/${PREFIX}/bin/shutdown
 	ln -s halt ${DESTDIR}/${PREFIX}/bin/poweroff
 	ln -s halt ${DESTDIR}/${PREFIX}/bin/reboot
 	install -d ${DESTDIR}/${PREFIX}/share/man/man1
