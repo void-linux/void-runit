@@ -1,3 +1,4 @@
+PREFIX ?=	/usr/local
 SCRIPTS=	1 2 3 ctrlaltdel
 
 all:
