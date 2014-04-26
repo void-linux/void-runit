@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
-/usr/bin/alsactl restore
+/usr/sbin/alsactl restore
 exec chpst -b alsa pause
