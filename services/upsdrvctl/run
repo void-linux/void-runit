@@ -1,0 +1,5 @@
+#!/bin/sh
+# Network UPS Tools - driver controller
+
+echo "Starting upsdrvctl..."
+exec /usr/bin/upsdrvctl -D start
