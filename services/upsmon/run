@@ -1,0 +1,6 @@
+#!/bin/sh
+# Network UPS Tools - monitor and shutdown controller
+
+echo "Starting upsmon..."
+# upsmon will run in the foreground and prints information on stdout
+exec /usr/bin/upsmon -D
