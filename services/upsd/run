@@ -1,0 +1,6 @@
+#!/bin/sh
+# Network UPS Tools - information server
+
+echo "Starting upsmon..."
+# upsmon will run in the foreground and prints information on stdout
+exec /usr/bin/upsd -D
