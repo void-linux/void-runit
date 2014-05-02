@@ -92,6 +92,21 @@ elif [ -r /etc/hostname ]; then
 fi
 msg "Setting up hostname to '${HOSTNAME}'...\n"
 
+if [ -x /usr/sbin/dmraid ]; then
+    msg "Activating dmraid devices...\n"
+    /usr/sbin/dmraid -i -ay
+fi
+
+if [ -x /usr/bin/btrfs ]; then
+    msg "Activating btrfs devices...\n"
+    btrfs device scan
+fi
+
+if [ -x /usr/sbin/vgchange ]; then
+    msg "Activating LVM devices...\n"
+    vgchange --sysinit -a y
+fi
+
 msg "Checking filesystems:\n"
 fsck -A -T -a -t noopts=_netdev
 rval=$?
