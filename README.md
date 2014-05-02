@@ -29,12 +29,12 @@ To see available runlevels (default and single, which just runs sulogin):
 
     $ ls /etc/runit/runsvdir
 
-To enable and start a service:
+To enable and start a service into the "current" runlevel:
 
-    $ ln -s /etc/sv/<service> /var/service
+    $ ln -s /etc/sv/<service> /etc/runit/runsvdir/current
 
 To disable and remove a service:
 
-    $ rm -f /var/service/<service>
+    $ rm -f /etc/runit/runsvdir/current/<service>
 
-Feel free to send patches and contribute with improvments and/or new services!
+Feel free to send patches and contribute with improvements and/or new services!
