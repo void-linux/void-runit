@@ -1,3 +1,2 @@
 #!/bin/sh
-echo "Starting dcron..."
 exec crond -f 2>&1

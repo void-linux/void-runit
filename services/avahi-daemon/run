@@ -1,4 +1,3 @@
 #!/bin/sh
 sv check dbus >/dev/null || exit 1
-echo "Starting avahi..."
 exec avahi-daemon -s

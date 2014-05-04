@@ -1,3 +1,2 @@
 #!/bin/sh
-echo "Starting rsyslogd..."
 exec rsyslogd -n
