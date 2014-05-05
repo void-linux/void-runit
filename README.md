@@ -19,7 +19,12 @@ and then update GRUB's configuration file:
 
     # update-grub
 
-reboot and runit will kick in and start services in "default" runlevel (multi-user).
+To reboot after making the change, you'll need to use the previous init tool "systemd" 
+reboot command directly.  From a command shell, as root run:
+
+    # systemctl reboot
+
+After the reboot runit will kick in and start services in "default" runlevel (multi-user).
 
 To see enabled services for "current" runlevel:
 
