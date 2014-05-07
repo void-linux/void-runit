@@ -13,11 +13,10 @@ done
 # Setup first tty as unicode again, stage1 does not work correctly for tty1.
 unicode_start
 
-# Create runlevel and then copy services.
+# Create runlevel and then make it the default.
 if [ -d /etc/runit/runsvdir/${runlevel} ]; then
     mkdir -p /run/runit/runsvdir
-    cp -aP /etc/runit/runsvdir/${runlevel} /run/runit/runsvdir
-    ln -s /run/runit/runsvdir/${runlevel} /run/runit/runsvdir/current
+    ln -s /etc/runit/runsvdir/${runlevel} /run/runit/runsvdir/current
 fi
 
 exec env - PATH=$PATH \
