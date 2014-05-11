@@ -18,6 +18,8 @@ install:
 	install -d ${DESTDIR}/etc/runit/runsvdir
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
 	install -m644 rc.conf ${DESTDIR}/etc
+	install -d ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
+	install -m644 dracut/*.conf ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	cp -aP runsvdir/* ${DESTDIR}/etc/runit/runsvdir/
 	cp -aP services/* ${DESTDIR}/etc/sv/
 
