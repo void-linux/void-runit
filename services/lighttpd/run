@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/sbin/lighttpd-angel -D -f /etc/lighttpd/lighttpd.conf
