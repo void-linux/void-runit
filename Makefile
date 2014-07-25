@@ -9,7 +9,6 @@ install:
 	install -d ${DESTDIR}/${PREFIX}/bin
 	install -m755 halt ${DESTDIR}/${PREFIX}/bin
 	install -m755 pause ${DESTDIR}/${PREFIX}/bin
-	install -m755 suspend ${DESTDIR}/${PREFIX}/bin
 	install -m755 shutdown.sh ${DESTDIR}/${PREFIX}/bin/shutdown
 	install -m755 zzz ${DESTDIR}/${PREFIX}/bin
 	ln -s zzz ${DESTDIR}/${PREFIX}/bin/ZZZ
