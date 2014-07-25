@@ -4,7 +4,6 @@ SCRIPTS=	1 2 3 ctrlaltdel
 all:
 	$(CC) $(CFLAGS) halt.c -o halt
 	$(CC) $(CFLAGS) pause.c -o pause
-	$(CC) $(CFLAGS) suspend.c -o suspend
 
 install:
 	install -d ${DESTDIR}/${PREFIX}/bin
