@@ -12,10 +12,14 @@ install:
 	install -m755 pause ${DESTDIR}/${PREFIX}/bin
 	install -m755 suspend ${DESTDIR}/${PREFIX}/bin
 	install -m755 shutdown.sh ${DESTDIR}/${PREFIX}/bin/shutdown
+	install -m755 zzz ${DESTDIR}/${PREFIX}/bin
+	ln -s zzz ${DESTDIR}/${PREFIX}/bin/ZZZ
 	ln -s halt ${DESTDIR}/${PREFIX}/bin/poweroff
 	ln -s halt ${DESTDIR}/${PREFIX}/bin/reboot
 	install -d ${DESTDIR}/${PREFIX}/share/man/man1
 	install -m644 pause.1 ${DESTDIR}/${PREFIX}/share/man/man1
+	install -d ${DESTDIR}/${PREFIX}/share/man/man8
+	install -m644 zzz.8 ${DESTDIR}/${PREFIX}/share/man/man8
 	install -d ${DESTDIR}/etc/sv
 	install -d ${DESTDIR}/etc/runit/runsvdir
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
