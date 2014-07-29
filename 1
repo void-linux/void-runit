@@ -97,6 +97,18 @@ if [ -x /usr/sbin/dmraid ]; then
     /usr/sbin/dmraid -i -ay
 fi
 
+if [ -x /usr/sbin/vgchange ]; then
+    msg "Activating LVM devices...\n"
+    vgchange --sysinit -a y
+fi
+
+if [ -e /etc/crypttab ]; then
+    msg "Activating encrypted devices...\n"
+    awk '/^#/ || /^$/ { next }
+         NF>2 { print "unsupported crypttab: " $0 >"/dev/stderr"; next }
+         { system("cryptsetup luksOpen " $2 " " $1) }' /etc/crypttab
+fi
+
 if [ -x /usr/bin/btrfs ]; then
     msg "Activating btrfs devices...\n"
     btrfs device scan
