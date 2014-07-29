@@ -10,6 +10,7 @@ install:
 	install -m755 halt ${DESTDIR}/${PREFIX}/bin
 	install -m755 pause ${DESTDIR}/${PREFIX}/bin
 	install -m755 shutdown.sh ${DESTDIR}/${PREFIX}/bin/shutdown
+	install -m755 modules-load ${DESTDIR}/${PREFIX}/bin/modules-load
 	install -m755 zzz ${DESTDIR}/${PREFIX}/bin
 	ln -s zzz ${DESTDIR}/${PREFIX}/bin/ZZZ
 	ln -s halt ${DESTDIR}/${PREFIX}/bin/poweroff

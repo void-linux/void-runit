@@ -138,10 +138,8 @@ cp /var/lib/random-seed /dev/urandom >/dev/null 2>&1 || true
 install -m0664 -o root -g utmp /dev/null /run/utmp
 rm -f /etc/nologin /forcefsck /forcequotacheck /fastboot
 
-if [ -n "$MODULES" ]; then
-    msg "Loading kernel modules: ${MODULES} ...\n"
-    modprobe -ab ${MODULES}
-fi
+msg "Loading kernel modules: ${MODULES} ...\n"
+modules-load ${MODULES}
 
 dmesg >/var/log/dmesg.log
 
