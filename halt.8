@@ -1,0 +1,66 @@
+.Dd July 29, 2014
+.Dt HALT 8
+.Os Linux
+.Sh NAME
+.Nm halt ,
+.Nm reboot ,
+.Nm poweroff
+.Nd stop the system
+.Sh SYNOPSIS
+.Nm halt
+.Op Fl n
+.Op Fl f
+.Nm reboot
+.Op Fl n
+.Op Fl f
+.Nm poweroff
+.Op Fl n
+.Op Fl f
+.Sh DESCRIPTION
+.Nm halt
+/
+.Nm reboot
+/
+.Nm poweroff
+tells
+.Xr init 8
+to bring down, reboot, or power off the system.
+Without
+.Fl f ,
+it is a shortcut for
+.Nm init 0
+/
+.Nm init 6 .
+.Bl -tag -width indent
+.It Fl n
+Don't sync before reboot or halt.
+Note that the kernel and storage drivers may still sync.
+.It Fl f
+Force halt or reboot, don't call
+.Xr init 8 .
+This is
+.Sy dangerous !
+.El
+.Sh UNSUPPORTED OPTIONS
+This version of
+.Nm
+is based on
+.Xr runit 8 ,
+the following features are
+.Sy not
+supported and silently ignored:
+.Bl -tag -width indent
+.It Fl w
+to just write the wtmp record.
+.It Fl d
+to not write the wtmp record.
+.It Fl h
+to put hard drives in standby mode.
+.It Fl i
+to shut down network interfaces.
+.Sh SEE ALSO
+.Xr shutdown 8 ,
+.Xr init 8
+.Sh AUTHOR
+.An Christian Neukirchen ,
+.Mt chneukirchen@gmail.com .

@@ -1,0 +1,90 @@
+.Dd July 29, 2014
+.Dt SHUTDOWN 8
+.Os Linux
+.Sh NAME
+.Nm shutdown
+.Nd bring down the system
+.Sh SYNOPSIS
+.Nm shutdown
+.Op Fl rhP
+.Op Fl fF
+.Op Cm now | Cm + Ns Ar mins
+.Op Ar message...
+.Sh DESCRIPTION
+.Nm
+brings the system down in a secure way.
+All logged-in users
+are notified that the system is going down, and  
+.Xr login 1
+is blocked.
+.Pp
+By default,
+.Nm
+puts the system into single user mode.  Rebooting and halting the
+system can be done using the following options:
+.Bl -tag -width indent
+.It Fl c
+Cancel an ongoing shutdown.
+.It Fl f
+Enable fast booting; skip
+.Xr fsck 8
+on next boot.
+.It Fl F
+Force run of
+.Xr fsck 8
+on next boot.
+.It Fl h
+Halt the system.
+.It Fl k
+Don't really shutdown; only send the warning messages to everybody.
+.It Fl P
+Poweroff the system.
+.It Fl r
+Reboot the system.
+.It Cm now
+Shutdown without further waiting.
+.It Cm + Ns Ar mins
+Wait
+.Ar mins
+minutes before shutting down.
+.It Ar message
+Message displayed to all users, defaults to "system is going down".
+.El
+.Sh UNSUPPORTED OPTIONS
+This version of
+.Nm
+is based on
+.Xr runit 8 ,
+the following features are
+.Sy not
+supported:
+.Bl -tag -width indent
+.It Fl t Ar secs
+to wait
+.Ar secs
+seconds between SIGKILL and SIGTERM on shutdown is silently ignored.
+.It Fl a
+Use 
+.Pa /etc/shutdown.allow .
+.It Fl H
+Drop into boot monitor.
+.It Fl n
+Don't call
+.Xr init 8 .
+.It Ar hh Ns : Ns Ar mm
+Absolute time specification is not implemented.
+.El
+.Sh EXAMPLES
+Turn off the system:
+.Dl # shutdown -h now
+.Sh SEE ALSO
+.Xr fsck 8 ,
+.Xr init 8 ,
+.Xr runit 8 ,
+.Xr runsvchdir 8 ,
+.Xr halt 8 ,
+.Xr poweroff 8 ,
+.Xr reboot 8
+.Sh AUTHOR
+.An Christian Neukirchen ,
+.Mt chneukirchen@gmail.com .

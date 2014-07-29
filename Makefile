@@ -18,6 +18,10 @@ install:
 	install -m644 pause.1 ${DESTDIR}/${PREFIX}/share/man/man1
 	install -d ${DESTDIR}/${PREFIX}/share/man/man8
 	install -m644 zzz.8 ${DESTDIR}/${PREFIX}/share/man/man8
+	install -m644 shutdown.8 ${DESTDIR}/${PREFIX}/share/man/man8
+	install -m644 halt.8 ${DESTDIR}/${PREFIX}/share/man/man8
+	ln -s halt.8 ${DESTDIR}/${PREFIX}/share/man/man8/poweroff.8
+	ln -s halt.8 ${DESTDIR}/${PREFIX}/share/man/man8/reboot.8
 	install -d ${DESTDIR}/etc/sv
 	install -d ${DESTDIR}/etc/runit/runsvdir
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
