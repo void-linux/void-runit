@@ -1,2 +1,2 @@
 #!/bin/sh
-exec chpst -U xbmc:xbmc xbmc-standalone -l /run/lirc/lircd
+exec sudo -u xbmc -g xbmc -- /usr/lib/xbmc/xbmc.bin --standalone -l /run/lirc/lircd
