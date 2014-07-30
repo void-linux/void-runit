@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/libexec/bluetooth/bluetoothd -n &>/dev/null
+exec /usr/libexec/bluetooth/bluetoothd -n >/dev/null
