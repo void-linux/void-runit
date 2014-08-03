@@ -1,2 +1,5 @@
 #!/bin/sh
-exec /sbin/lightdm
+[ ! -d /run/lightdm ] && mkdir -p /run/lightdm
+chmod 0711 /run/lightdm
+chown lightdm:lightdm /run/lightdm
+exec lightdm
