@@ -1,12 +1,6 @@
 #!/bin/sh
 # vim: set ts=4 sw=4 et:
 
-emergency_shell() {
-    echo "Cannot continue due to errors above, starting emergency shell."
-    echo "When ready type exit to continue booting."
-    /bin/sh -l
-}
-
 msg() {
     # bold
     printf "\033[1m=> $@\033[m"
@@ -17,9 +11,9 @@ msg_ok() {
     printf "\033[1m\033[32m OK\033[m\n"
 }
 
-msg_fail() {
+msg_error() {
     # bold/red
-    printf "\033[1m\033[31m FAIL\033[m\n"
+    printf "\033[1m\033[31mERROR: $@\033[m\n"
 }
 
 msg_warn() {
@@ -27,11 +21,25 @@ msg_warn() {
     printf "\033[1m\033[33mWARNING: $@\033[m"
 }
 
+emergency_shell() {
+    echo
+    echo "Cannot continue due to errors above, starting emergency shell."
+    echo "When ready type exit to continue booting."
+    /bin/sh -l
+}
+
 PATH=/usr/bin:/usr/sbin
+
+# re-exec this script with a controlling tty
+if [ $(tty) = /dev/console ]; then
+    mountpoint -q /sys || mount -t sysfs sys /sys -o nosuid,noexec,nodev
+    tty=$(cat /sys/class/tty/console/active)
+    exec setsid sh -c "exec sh /etc/runit/1 < /dev/$tty > /dev/$tty 2>&1"
+fi
 
 msg "Welcome to Void!\n"
 
-. /etc/rc.conf
+[ -r /etc/rc.conf ] && . /etc/rc.conf
 
 msg "Mounting pseudo-filesystems...\n"
 mountpoint -q /proc || mount -t proc proc /proc -o nosuid,noexec,nodev
@@ -43,26 +51,26 @@ mountpoint -q /dev/pts || mount -n -t devpts devpts /dev/pts -o mode=0620,gid=5,
 mountpoint -q /dev/shm || mount -n -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
 
 msg "Remounting rootfs read-only...\n"
-mount -o remount,ro /
+mount -o remount,ro / || emergency_shell
 
-msg "Setting up ttys to unicode mode...\n"
+msg "Setting up TTYs to unicode mode...\n"
 for i in /dev/tty[0-6]; do
-    unicode_start < $i
+    unicode_start < $i || emergency_shell
 done
 if [ -n "$FONT" ]; then
-    msg "Setting up ttys font to '${FONT}'...\n"
+    msg "Setting up TTYs font to '${FONT}'...\n"
     for i in /dev/tty[0-6]; do
-        setfont ${FONT_MAP:+-m $FONT_MAP} ${FONT_UNIMAP:+-u $FONT_UNIMAP} $FONT -C $i
+        setfont ${FONT_MAP:+-m $FONT_MAP} ${FONT_UNIMAP:+-u $FONT_UNIMAP} $FONT -C $i || emergency_shell
     done
 fi
 
 msg "Setting up keymap to '${KEYMAP:-us}'...\n"
-loadkeys -q -u ${KEYMAP:-us}
+loadkeys -q -u ${KEYMAP:-us} || emergency_shell
 
 if [ -n "$HARDWARECLOCK" ]; then
     msg "Setting up RTC to '${HARDWARECLOCK}'...\n"
     TZ=$TIMEZONE hwclock --systz \
-        ${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z) --noadjfile}
+        ${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z) --noadjfile} || emergency_shell
 fi
 
 if [ -x /usr/lib/systemd/systemd-udevd ]; then
@@ -82,7 +90,7 @@ if [ -n "${_udevd}" ]; then
 fi
 
 msg "Setting up loopback interface...\n"
-ip link set up dev lo
+ip link set up dev lo || emergency_shell
 
 if [ -n "$HOSTNAME" ]; then
     echo "$HOSTNAME" > /proc/sys/kernel/hostname
@@ -94,12 +102,17 @@ msg "Setting up hostname to '${HOSTNAME}'...\n"
 
 if [ -x /usr/sbin/dmraid ]; then
     msg "Activating dmraid devices...\n"
-    /usr/sbin/dmraid -i -ay
+    dmraid -i -ay || emergency_shell
+fi
+
+if [ -x /usr/bin/btrfs ]; then
+    msg "Activating btrfs devices...\n"
+    btrfs device scan || emergency_shell
 fi
 
 if [ -x /usr/sbin/vgchange ]; then
     msg "Activating LVM devices...\n"
-    vgchange --sysinit -a y
+    vgchange --sysinit -a y || emergency_shell
 fi
 
 if [ -e /etc/crypttab ]; then
@@ -107,36 +120,34 @@ if [ -e /etc/crypttab ]; then
     awk '/^#/ || /^$/ { next }
          NF>2 { print "unsupported crypttab: " $0 >"/dev/stderr"; next }
          { system("cryptsetup luksOpen " $2 " " $1) }' /etc/crypttab
-fi
 
-if [ -x /usr/bin/btrfs ]; then
-    msg "Activating btrfs devices...\n"
-    btrfs device scan
-fi
-
-if [ -x /usr/sbin/vgchange ]; then
-    msg "Activating LVM devices...\n"
-    vgchange --sysinit -a y
+    if [ -x /usr/sbin/vgchange ]; then
+      msg "Activating LVM devices...\n"
+      vgchange --sysinit -a y || emergency_shell
+    fi
 fi
 
 msg "Checking filesystems:\n"
 fsck -A -T -a -t noopts=_netdev
-rval=$?
-if [ $rval -gt 1 ]; then
+if [ $? -gt 1 ]; then
     emergency_shell
 fi
 
 msg "Mounting rootfs read-write...\n"
-mount -o remount,rw /
+mount -o remount,rw / || emergency_shell
 
 msg "Mounting all non-network filesystems...\n"
-mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev
+mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev || emergency_shell
 
 mountpoint -q /sys/fs/cgroup || mount -t tmpfs cgroup /sys/fs/cgroup -o mode=0755
 awk '$4==1 { system("mountpoint -q /sys/fs/cgroup/" $1 " || mount -t cgroup -o " $1 ",x-mount.mkdir cgroup /sys/fs/cgroup/" $1) }' /proc/cgroups
 
 msg "Initializing swap...\n"
-swapon -a
+swapon -a || emergency_shell
+
+if [ -x /usr/sbin/vgchange ]; then
+    vgchange --monitor y || emergency_shell
+fi
 
 if [ -n "$TIMEZONE" ]; then
     msg "Setting up timezone to '${TIMEZONE}'...\n"
