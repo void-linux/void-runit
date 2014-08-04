@@ -7,32 +7,15 @@ difference that I'm trying to avoid the bash dependency.
 
 ### How to use it
 
-    # xbps-install -Sy runit-void
+runit is used by default in the Void distribution.
     
-Append `init=/usr/bin/runit-init` to the kernel cmdline, I'd suggest you to use `/etc/default/grub`:
-
-    ...
-    GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 init=/usr/bin/runit-init"
-    ...
-    
-and then update GRUB's configuration file:
-
-    # update-grub
-
-To reboot after making the change, you'll need to use the previous init tool "systemd" 
-reboot command directly.  From a command shell, as root run:
-
-    # systemctl reboot
-
-After the reboot runit will kick in and start services in "default" runlevel (multi-user).
-
 To see enabled services for "current" runlevel:
 
-    $ ls /var/service
+    $ ls -l /var/service
 
 To see available runlevels (default and single, which just runs sulogin):
 
-    $ ls /etc/runit/runsvdir
+    $ ls -l /etc/runit/runsvdir
 
 To enable and start a service into the "current" runlevel:
 
