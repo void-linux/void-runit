@@ -22,7 +22,7 @@ while getopts akrhPHfFnct: opt; do
 done
 shift $(expr $OPTIND - 1)
 
-time=$1; shift
+[ -n "$1" ] && time=$1 && shift
 message="${*:-system is going down}"
 
 if [ "$action" = "cancel" ]; then
@@ -31,6 +31,10 @@ if [ "$action" = "cancel" ]; then
   exit
 fi
 
+if [ ! -w /run/runit/shutdown.pid ]; then
+  echo "Not enough permissions to execute ${0#*/}"
+  exit 1
+fi
 echo $$ >/run/runit/shutdown.pid
 
 case "$time" in
