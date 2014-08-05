@@ -159,6 +159,8 @@ cp /var/lib/random-seed /dev/urandom >/dev/null 2>&1 || true
 ( umask 077; dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 >/dev/null 2>&1 )
 
 install -m0664 -o root -g utmp /dev/null /run/utmp
+install -d -m1777 /tmp/.X11-unix /tmp/.ICE-unix
+
 rm -f /etc/nologin /forcefsck /forcequotacheck /fastboot
 
 msg "Loading kernel modules...\n"
