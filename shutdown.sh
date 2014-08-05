@@ -37,7 +37,7 @@ if [ "$action" = "cancel" ]; then
   exit
 fi
 
-if [ ! -w /run/runit/shutdown.pid ]; then
+if ! touch /run/runit/shutdown.pid 2>/dev/null; then
   echo "Not enough permissions to execute ${0#*/}"
   exit 1
 fi
