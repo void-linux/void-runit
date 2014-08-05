@@ -5,6 +5,10 @@ single() {
   runsvchdir single
 }
 
+usage() {
+  echo "Usage: shutdown [-fF] [-kchPr] time [warning message]" >/dev/stderr; exit 1
+}
+
 action=single
 
 while getopts akrhPHfFnct: opt; do
@@ -17,12 +21,14 @@ while getopts akrhPHfFnct: opt; do
     c) action=cancel;;
     h|P) action=halt;;
     r) action=reboot;;
-    [?]) echo "Usage: shutdown [-fF] [-kchPr] time [warning message]" >/dev/stderr; exit 1;;
+    [?]) usage;;
   esac
 done
 shift $(expr $OPTIND - 1)
 
-[ -n "$1" ] && time=$1 && shift
+[ $# -eq 0 ] && usage
+
+time=$1; shift
 message="${*:-system is going down}"
 
 if [ "$action" = "cancel" ]; then
