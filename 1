@@ -167,6 +167,11 @@ msg "Loading kernel modules...\n"
 modules-load -v ${MODULES} | tr '\n' ' ' | sed 's:insmod [^ ]*/::g; s:\.ko\(\.gz\)\? ::g'
 echo
 
+if [ -x /sbin/sysctl ]; then
+    msg "Loading sysctl(8) settings...\n"
+    sysctl --system
+fi
+
 dmesg >/var/log/dmesg.log
 
 install -m0 /dev/null /etc/runit/reboot
