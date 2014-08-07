@@ -12,7 +12,7 @@ msg "Welcome to Void!\n"
 # Start core services: one-time system tasks.
 detect_virt
 for f in /etc/runit/core-services/*.sh; do
-    [ -x $f ] && $f
+    [ -r $f ] && . $f
 done
 
 dmesg >/var/log/dmesg.log

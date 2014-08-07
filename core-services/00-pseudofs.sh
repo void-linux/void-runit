@@ -1,9 +1,4 @@
-#!/bin/sh
-
-PATH=/usr/bin:/usr/sbin
-
-. /etc/runit/functions
-[ -r /etc/rc.conf ] && . /etc/rc.conf
+# vim: set ts=4 sw=4 et:
 
 msg "Mounting pseudo-filesystems...\n"
 mountpoint -q /proc || mount -t proc proc /proc -o nosuid,noexec,nodev

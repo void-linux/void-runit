@@ -1,8 +1,4 @@
-#!/bin/sh
 # vim: set ts=4 sw=4 et:
-
-. /etc/runit/functions
-[ -r /etc/rc.conf ] && . /etc/rc.conf
 
 msg "Setting up loopback interface...\n"
 ip link set up dev lo
