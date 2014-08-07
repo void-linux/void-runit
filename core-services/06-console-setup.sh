@@ -2,11 +2,6 @@
 
 [ -n "$VIRTUALIZATION" ] && return 0
 
-msg "Setting up TTYs to unicode mode...\n"
-for i in /dev/tty[0-6]; do
-    unicode_start < $i
-done
-
 if [ -n "$FONT" ]; then
     msg "Setting up TTYs font to '${FONT}'...\n"
     for i in /dev/tty[0-6]; do
