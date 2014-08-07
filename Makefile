@@ -29,8 +29,8 @@ install:
 	install -m755 core-services/*.sh ${DESTDIR}/etc/runit/core-services
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
 	install -m644 functions $(DESTDIR)/etc/runit
-	#[ ! -f $(DESTDIR)/etc/rc.conf ] && install -m644 rc.conf ${DESTDIR}/etc
-	#[ ! -f $(DESTDIR)/etc/rc.local ] && install -m755 rc.local ${DESTDIR}/etc
+	install -m644 rc.conf ${DESTDIR}/etc
+	install -m755 rc.local ${DESTDIR}/etc
 	install -d ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	install -m644 dracut/*.conf ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	cp -aP runsvdir/* ${DESTDIR}/etc/runit/runsvdir/
