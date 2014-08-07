@@ -39,12 +39,10 @@ sleep 5
 msg "Sending KILL signal to processes...\n"
 pkill --inverse -s0,1 -KILL
 
-msg "Unmounting filesystems, disabling swap...\n"
-umount /tmp
-swapoff -a
-umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
-
 if [ -z "$VIRTUALIZATION" ]; then
+    msg "Unmounting filesystems, disabling swap...\n"
+    swapoff -a
+    umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
     msg "Remounting rootfs read-only...\n"
     mount -o remount,ro /
 fi
