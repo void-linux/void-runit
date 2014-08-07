@@ -1,0 +1,35 @@
+# *-*-shell-*-*
+
+msg() {
+    # bold
+    printf "\033[1m=> $@\033[m"
+}
+
+msg_ok() {
+    # bold/green
+    printf "\033[1m\033[32m OK\033[m\n"
+}
+
+msg_error() {
+    # bold/red
+    printf "\033[1m\033[31mERROR: $@\033[m\n"
+}
+
+msg_warn() {
+    # bold/yellow
+    printf "\033[1m\033[33mWARNING: $@\033[m"
+}
+
+emergency_shell() {
+    echo
+    echo "Cannot continue due to errors above, starting emergency shell."
+    echo "When ready type exit to continue booting."
+    /bin/sh -l
+}
+
+detect_virt() {
+    # Detect LXC containers
+   if grep -q lxc /proc/self/environ >/dev/null; then
+       export VIRTUALIZATION=1
+   fi
+}

@@ -10,9 +10,6 @@ for arg in $(cat /proc/cmdline); do
     esac
 done
 
-# Setup first tty as unicode again, stage1 does not work correctly for tty1.
-unicode_start
-
 [ -x /etc/rc.local ] && /etc/rc.local
 
 # Create runlevel and then make it the default.

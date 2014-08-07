@@ -12,22 +12,25 @@ install:
 	install -m755 shutdown.sh ${DESTDIR}/${PREFIX}/bin/shutdown
 	install -m755 modules-load ${DESTDIR}/${PREFIX}/bin/modules-load
 	install -m755 zzz ${DESTDIR}/${PREFIX}/bin
-	ln -s zzz ${DESTDIR}/${PREFIX}/bin/ZZZ
-	ln -s halt ${DESTDIR}/${PREFIX}/bin/poweroff
-	ln -s halt ${DESTDIR}/${PREFIX}/bin/reboot
+	ln -sf zzz ${DESTDIR}/${PREFIX}/bin/ZZZ
+	ln -sf halt ${DESTDIR}/${PREFIX}/bin/poweroff
+	ln -sf halt ${DESTDIR}/${PREFIX}/bin/reboot
 	install -d ${DESTDIR}/${PREFIX}/share/man/man1
 	install -m644 pause.1 ${DESTDIR}/${PREFIX}/share/man/man1
 	install -d ${DESTDIR}/${PREFIX}/share/man/man8
 	install -m644 zzz.8 ${DESTDIR}/${PREFIX}/share/man/man8
 	install -m644 shutdown.8 ${DESTDIR}/${PREFIX}/share/man/man8
 	install -m644 halt.8 ${DESTDIR}/${PREFIX}/share/man/man8
-	ln -s halt.8 ${DESTDIR}/${PREFIX}/share/man/man8/poweroff.8
-	ln -s halt.8 ${DESTDIR}/${PREFIX}/share/man/man8/reboot.8
+	ln -sf halt.8 ${DESTDIR}/${PREFIX}/share/man/man8/poweroff.8
+	ln -sf halt.8 ${DESTDIR}/${PREFIX}/share/man/man8/reboot.8
 	install -d ${DESTDIR}/etc/sv
 	install -d ${DESTDIR}/etc/runit/runsvdir
+	install -d ${DESTDIR}/etc/runit/core-services
+	install -m755 core-services/*.sh ${DESTDIR}/etc/runit/core-services
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
-	install -m644 rc.conf ${DESTDIR}/etc
-	install -m755 rc.local ${DESTDIR}/etc
+	install -m644 functions $(DESTDIR)/etc/runit
+	#[ ! -f $(DESTDIR)/etc/rc.conf ] && install -m644 rc.conf ${DESTDIR}/etc
+	#[ ! -f $(DESTDIR)/etc/rc.local ] && install -m755 rc.local ${DESTDIR}/etc
 	install -d ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	install -m644 dracut/*.conf ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	cp -aP runsvdir/* ${DESTDIR}/etc/runit/runsvdir/

@@ -3,43 +3,51 @@
 
 PATH=/usr/bin:/usr/sbin
 
-. /etc/rc.conf
+. /etc/runit/functions
+detect_virt
+[ -r /etc/rc.conf ] && . /etc/rc.conf
 
 if [ -e /run/runit/reboot ]; then
     touch /etc/runit/reboot
     chmod 100 /etc/runit/reboot
 fi
 
-echo "Waiting for services to stop..."
+echo
+msg "Waiting for services to stop...\n"
 sv -w196 force-stop /var/service/*
 sv exit /var/service/*
 
 stty onlcr
 
-echo "Saving random seed..."
+msg "Saving random seed...\n"
 dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 >/dev/null 2>&1
 
-if [ -n "$HARDWARECLOCK" ]; then
+if [ -z "$VIRTUALIZATION" -a -n "$HARDWARECLOCK" ]; then
     hwclock --systohc ${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z)}
 fi
 
 halt -w  # for utmp
 
-echo "Stopping udev..."
-udevadm control --exit
+if [ -z "$VIRTUALIZATION" ]; then
+    msg "Stopping udev...\n"
+    udevadm control --exit
+fi
 
-echo "Sending TERM signal to processes..."
+msg "Sending TERM signal to processes...\n"
 pkill --inverse -s0,1 -TERM
 sleep 5
-echo "Sending KILL signal to processes..."
+msg "Sending KILL signal to processes...\n"
 pkill --inverse -s0,1 -KILL
 
-echo "Unmounting filesystems, disabling swap..."
+msg "Unmounting filesystems, disabling swap...\n"
 umount /tmp
 swapoff -a
 umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
 
-echo "Remounting rootfs read-only..."
-mount -o remount,ro /
+if [ -z "$VIRTUALIZATION" ]; then
+    msg "Remounting rootfs read-only...\n"
+    mount -o remount,ro /
+fi
+
 sleep 1
 sync
