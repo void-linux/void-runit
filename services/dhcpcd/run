@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/sbin/dhcpcd -q -B 2>&1
+exec dhcpcd -B
