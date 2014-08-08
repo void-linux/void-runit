@@ -17,8 +17,6 @@ msg "Waiting for services to stop...\n"
 sv -w196 force-stop /var/service/*
 sv exit /var/service/*
 
-stty onlcr
-
 msg "Saving random seed...\n"
 dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 >/dev/null 2>&1
 
