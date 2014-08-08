@@ -1,3 +1,2 @@
 #!/bin/sh
-# Transmission daemon
-exec /usr/bin/transmission-daemon -f --log-error
+exec chpst -u transmission:transmission /usr/bin/transmission-daemon -f --log-error
