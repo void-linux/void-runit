@@ -32,10 +32,21 @@ if [ -e /etc/crypttab ]; then
     fi
 fi
 
-msg "Checking filesystems:\n"
-fsck -A -T -a -t noopts=_netdev
-if [ $? -gt 1 ]; then
-    emergency_shell
+[ -f /fastboot ] && FASTBOOT=1
+[ -f /forcefsck ] && FORCEFSCK="-f"
+for arg in $(cat /proc/cmdline); do
+    case $arg in
+        fastboot) FASTBOOT=1;;
+        forcefsck) FORCEFSCK="-f";;
+    esac
+done
+
+if [ -z "$FASTBOOT" ]; then
+    msg "Checking filesystems:\n"
+    fsck -A -T -a -t noopts=_netdev $FORCEFSCK
+    if [ $? -gt 1 ]; then
+        emergency_shell
+    fi
 fi
 
 msg "Mounting rootfs read-write...\n"
