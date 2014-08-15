@@ -26,7 +26,7 @@ install:
 	install -d ${DESTDIR}/etc/sv
 	install -d ${DESTDIR}/etc/runit/runsvdir
 	install -d ${DESTDIR}/etc/runit/core-services
-	install -m755 core-services/*.sh ${DESTDIR}/etc/runit/core-services
+	install -m644 core-services/*.sh ${DESTDIR}/etc/runit/core-services
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
 	install -m644 functions $(DESTDIR)/etc/runit
 	install -m644 rc.conf ${DESTDIR}/etc
