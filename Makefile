@@ -33,6 +33,8 @@ install:
 	install -m755 rc.local ${DESTDIR}/etc
 	install -d ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	install -m644 dracut/*.conf ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
+	ln -sf /run/runit/reboot ${DESTDIR}/etc/runit/
+	ln -sf /run/runit/stopit ${DESTDIR}/etc/runit/
 	cp -aP runsvdir/* ${DESTDIR}/etc/runit/runsvdir/
 	cp -aP services/* ${DESTDIR}/etc/sv/
 

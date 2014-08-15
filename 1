@@ -17,7 +17,8 @@ done
 
 dmesg >/var/log/dmesg.log
 
-install -m100 /dev/null /etc/runit/reboot
-install -m100 /dev/null /etc/runit/stopit
+mkdir -p /run/runit
+install -m100 /dev/null /run/runit/reboot
+install -m100 /dev/null /run/runit/stopit
 
 msg "Initialization complete, running stage 2...\n"
