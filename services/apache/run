@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/sbin/httpd -DNO_DETACH
+exec httpd -DNO_DETACH

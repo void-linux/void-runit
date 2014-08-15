@@ -1,2 +1,2 @@
 #!/bin/sh
-exec chpst -o 1048576 -p 1048576 /usr/bin/docker -d 2>/dev/null
+exec chpst -o 1048576 -p 1048576 docker -d 2>/dev/null

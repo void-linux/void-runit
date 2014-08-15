@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/bin/slim -nodaemon
+exec slim -nodaemon

@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/bin/dropbear -F -R
+exec dropbear -F -R

@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/bin/cntlm -f 2>&1
+exec cntlm -f 2>&1

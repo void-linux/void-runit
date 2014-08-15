@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /sbin/agetty console linux
+exec agetty console linux
