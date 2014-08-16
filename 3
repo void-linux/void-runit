@@ -8,8 +8,7 @@ detect_virt
 [ -r /etc/rc.conf ] && . /etc/rc.conf
 
 if [ -e /run/runit/reboot ]; then
-    touch /etc/runit/reboot
-    chmod 100 /etc/runit/reboot
+    chmod 100 /run/runit/reboot
 fi
 
 echo
