@@ -7,7 +7,7 @@ mount -o remount,ro / || emergency_shell
 
 if [ -x /sbin/dmraid ]; then
     msg "Activating dmraid devices...\n"
-    dmraid -i -ay || emergency_shell
+    dmraid -i -ay
 fi
 
 if [ -x /bin/btrfs ]; then
