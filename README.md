@@ -25,4 +25,8 @@ To disable and remove a service:
 
     # rm -f /var/service/<service>
 
+To view status of all services for "current" runlevel:
+
+    # sv status /var/service/*
+    
 Feel free to send patches and contribute with improvements and/or new services!
