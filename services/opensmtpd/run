@@ -1,2 +1,2 @@
 #!/bin/sh
-exec smtpd -v -d 2>&1
+exec smtpd -d 2>&1
