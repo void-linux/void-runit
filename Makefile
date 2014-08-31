@@ -6,15 +6,15 @@ all:
 	$(CC) $(CFLAGS) pause.c -o pause
 
 install:
-	install -d ${DESTDIR}/${PREFIX}/bin
-	install -m755 halt ${DESTDIR}/${PREFIX}/bin
-	install -m755 pause ${DESTDIR}/${PREFIX}/bin
-	install -m755 shutdown.sh ${DESTDIR}/${PREFIX}/bin/shutdown
-	install -m755 modules-load ${DESTDIR}/${PREFIX}/bin/modules-load
-	install -m755 zzz ${DESTDIR}/${PREFIX}/bin
-	ln -sf zzz ${DESTDIR}/${PREFIX}/bin/ZZZ
-	ln -sf halt ${DESTDIR}/${PREFIX}/bin/poweroff
-	ln -sf halt ${DESTDIR}/${PREFIX}/bin/reboot
+	install -d ${DESTDIR}/${PREFIX}/sbin
+	install -m755 halt ${DESTDIR}/${PREFIX}/sbin
+	install -m755 pause ${DESTDIR}/${PREFIX}/sbin
+	install -m755 shutdown.sh ${DESTDIR}/${PREFIX}/sbin/shutdown
+	install -m755 modules-load ${DESTDIR}/${PREFIX}/sbin/modules-load
+	install -m755 zzz ${DESTDIR}/${PREFIX}/sbin
+	ln -sf zzz ${DESTDIR}/${PREFIX}/sbin/ZZZ
+	ln -sf halt ${DESTDIR}/${PREFIX}/sbin/poweroff
+	ln -sf halt ${DESTDIR}/${PREFIX}/sbin/reboot
 	install -d ${DESTDIR}/${PREFIX}/share/man/man1
 	install -m644 pause.1 ${DESTDIR}/${PREFIX}/share/man/man1
 	install -d ${DESTDIR}/${PREFIX}/share/man/man8
