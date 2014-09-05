@@ -1,31 +1,25 @@
 #!/bin/sh
 
 # Make sure the statd service is running.
-sv check statd
+sv check statd >/dev/null || exit 1
 
 # Get the nfs service parameters from the LFS standard file
 # this sets some envars.
-source /etc/conf.d/nfs-server.conf
+if [ -e /etc/conf.d/nfs-server.conf ]; then
+	. /etc/conf.d/nfs-server.conf
+fi
 
-echo "Loading kernel modules"
-modprobe sunrpc
-modprobe nfs
-modprobe nfsd
+modprobe sunrpc || exit 1
+modprobe nfs || exit 1
+modprobe nfsd || exit 1
 
-echo "Mounting pipefs filesystem"
-mount -t rpc_pipefs rpc_pipefs /var/lib/nfs/rpc_pipefs defaults
+mount -t rpc_pipefs rpc_pipefs /var/lib/nfs/rpc_pipefs defaults || exit 1
 
 # Uncomment this and add the two daemons if you need kerberos support.
-# sv check idmapd gssd
+# sv check idmapd gssd >/dev/null || exit 1
 
-echo "Mounting NFS filesystem"
-mount -t nfsd nfsd /proc/fs/nfsd
+mount -t nfsd nfsd /proc/fs/nfsd || exit 1
+exportfs -ra > /dev/null || exit 1
+rpc.nfsd -- $PROCESSES || exit 1
 
-echo "Re-export all directories in /etc/exports"
-/usr/sbin/exportfs -ra > /dev/null
-
-echo "start some nfsd threads"
-/usr/sbin/rpc.nfsd -- $PROCESSES
-
-echo "Start the rpc.mountd daemon"
-exec /usr/sbin/rpc.mountd --foreground
+exec rpc.mountd --foreground
