@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/usr/sbin/rpc.nfsd -- 0
+/usr/sbin/exportfs -a -u

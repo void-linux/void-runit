@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Make sure the portmap service is running.
+sv check rpcbind
+
+exec rpc.statd -F -d
