@@ -9,5 +9,7 @@ if [ -n "$FONT" ]; then
     done
 fi
 
-msg "Setting up keymap to '${KEYMAP:-us}'...\n"
-loadkeys -q -u ${KEYMAP:-us}
+if [ -n "$KEYMAP" ]; then
+    msg "Setting up keymap to '${KEYMAP}'...\n"
+    loadkeys -q -u ${KEYMAP}
+fi
