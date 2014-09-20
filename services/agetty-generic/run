@@ -1,3 +1,10 @@
 #!/bin/sh
 tty=${PWD##*-}
-exec setsid agetty $tty linux
+if [ -x /sbin/getty ]; then
+	# busybox
+	GETTY=getty
+elif [ -x /sbin/agetty ]; then
+	# util-linux
+	GETTY=agetty
+fi
+exec setsid $GETTY $tty 38400 linux

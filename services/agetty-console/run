@@ -1,2 +1,7 @@
 #!/bin/sh
-exec agetty console linux
+if [ -x /sbin/getty ]; then
+	GETTY=getty
+elif [ -x /sbin/agetty ]; then
+	GETTY=agetty
+fi
+exec $GETTY console 38400 linux
