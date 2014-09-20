@@ -11,7 +11,7 @@ find -L /etc/modules-load.d /run/modules-load.d /usr/lib/modules-load.d \
 # Load each basename only once.
 	sort -k2 -s | uniq -f1 | cut -d' ' -f1 |
 # Read the files, output all non-empty, non-comment lines.
-	xargs -r -d'\n' grep -h -v -e '^[#;]' -e '^$'
+	tr '\012' '\0' | xargs -0 -r grep -h -v -e '^[#;]' -e '^$'
 } |
 # Call modprobe on the list of modules
-xargs -r -d'\n' modprobe -ab "$@"
+tr '\012' '\0' | xargs -0 -r modprobe -ab "$@"
