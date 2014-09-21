@@ -1,14 +1,14 @@
 # vim: set ts=4 sw=4 et:
 
 msg "Mounting pseudo-filesystems...\n"
-mountpoint -q /proc || mount -t proc proc /proc -o nosuid,noexec,nodev
-mountpoint -q /sys || mount -t sysfs sys /sys -o nosuid,noexec,nodev
-mountpoint -q /run || mount -t tmpfs run /run -o mode=0755,nosuid,nodev
-mountpoint -q /dev || mount -t devtmpfs dev /dev -o mode=0755,nosuid
+mountpoint -q /proc || mount -o nosuid,noexec-nodev -t proc proc /proc
+mountpoint -q /sys || mount -o nosuid,noexec,nodev -t sysfs sys /sys
+mountpoint -q /run || mount -o mode=0755,nosuid,nodev -t tmpfs run /run
+mountpoint -q /dev || mount -o mode=0755,nosuid -t devtmpfs dev
 mkdir -p -m0755 /run/runit /run/lvm /run/user /dev/pts /dev/shm
-mountpoint -q /dev/pts || mount -n -t devpts devpts /dev/pts -o mode=0620,gid=5,nosuid,noexec
-mountpoint -q /dev/shm || mount -n -t tmpfs shm /dev/shm -o mode=1777,nosuid,nodev
+mountpoint -q /dev/pts || mount -o mode=0620,gid=5,nosuid,noexec -n -t devpts devpts /dev/pts
+mountpoint -q /dev/shm || mount -o mode=1777,nosuid,nodev -n -t tmpfs shm /dev/shm
 
 if [ -z "$VIRTUALIZATION" ]; then
-    mountpoint -q /sys/fs/cgroup || mount -t tmpfs cgroup /sys/fs/cgroup -o mode=0755
+    mountpoint -q /sys/fs/cgroup || mount -o mode=0755 -t tmpfs cgroup /sys/fs/cgroup
 fi
