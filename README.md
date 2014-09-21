@@ -5,6 +5,13 @@ This repository contains the runit init scripts for the Void Linux distribution.
 This is loosely based on https://github.com/chneukirchen/ignite but with the
 difference that I'm trying to avoid the bash dependency.
 
+## Dependencies
+
+- A POSIX shell
+- A POSIX awk
+- procps-ng (needs pkill -s0,1 and sysctl --system)
+- runit
+
 ### How to use it
 
 runit is used by default in the Void distribution.
