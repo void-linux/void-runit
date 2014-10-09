@@ -1,2 +1,0 @@
-#!/bin/sh
-exec sudo -u xbmc -g xbmc -- /usr/lib/xbmc/xbmc.bin --standalone -l /run/lirc/lircd
