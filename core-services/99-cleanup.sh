@@ -1,4 +1,4 @@
-#!/bin/sh
+# vim: set ts=4 sw=4 et:
 
 install -m0664 -o root -g utmp /dev/null /run/utmp
 if [ ! -e /var/log/wtmp ]; then
