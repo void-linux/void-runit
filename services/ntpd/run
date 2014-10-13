@@ -1,2 +1,0 @@
-#!/bin/sh
-exec ntpd -g -u ntpd:ntpd -n

@@ -1,2 +1,0 @@
-#!/bin/sh
-exec bumblebeed --use-syslog

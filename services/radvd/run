@@ -1,2 +1,0 @@
-#!/bin/sh
-exec radvd --nodaemon --logmethod=syslog

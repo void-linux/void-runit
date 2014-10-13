@@ -1,2 +1,0 @@
-#!/bin/sh
-exec cntlm -f 2>&1
