@@ -13,7 +13,7 @@ fi
 
 echo
 msg "Waiting for services to stop...\n"
-sv -w196 force-stop /var/service/*
+sv force-stop /var/service/*
 sv exit /var/service/*
 
 msg "Saving random seed...\n"
@@ -32,7 +32,7 @@ fi
 
 msg "Sending TERM signal to processes...\n"
 pkill --inverse -s0,1 -TERM
-sleep 5
+sleep 1
 msg "Sending KILL signal to processes...\n"
 pkill --inverse -s0,1 -KILL
 
@@ -44,5 +44,4 @@ if [ -z "$VIRTUALIZATION" ]; then
     mount -o remount,ro /
 fi
 
-sleep 1
 sync
