@@ -1,6 +1,8 @@
 #!/bin/sh
 # modules-load [-n] [-v] - modules-load.d(5) compatible kernel module loader
 
+export PATH=/bin:/sbin
+
 {
 # Parameters passed as modules-load= or rd.modules-load= in kernel command line.
 sed -nr 's/,/\n/;s/(.* |^)(rd\.)?modules-load=([^ ]*).*/\3/p' /proc/cmdline
