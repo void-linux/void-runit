@@ -13,3 +13,9 @@ if [ -n "$KEYMAP" ]; then
     msg "Setting up keymap to '${KEYMAP}'...\n"
     loadkeys -q -u ${KEYMAP}
 fi
+
+if [ -n "$HARDWARECLOCK" ]; then
+    msg "Setting up RTC to '${HARDWARECLOCK}'...\n"
+    TZ=$TIMEZONE hwclock --systz \
+        ${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z) --noadjfile} || emergency_shell
+fi
