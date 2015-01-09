@@ -59,7 +59,7 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
             }
         }
         if ( makeswap == "y" && use_luks != "y" ) {
-            ccmd="cryptsetup " cmd " -d " key " create " src " " dest1;
+            ccmd="cryptsetup " cmd " -d " key " create " dest " " src;
             ccmd_2="mkswap /dev/mapper/" dest;
             cmd="";
             makeswap="";
