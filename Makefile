@@ -29,6 +29,7 @@ install:
 	install -m644 core-services/*.sh ${DESTDIR}/etc/runit/core-services
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
 	install -m644 functions $(DESTDIR)/etc/runit
+	install -m644 crypt.awk  ${DESTDIR}/etc/runit
 	install -m644 rc.conf ${DESTDIR}/etc
 	install -m755 rc.local ${DESTDIR}/etc
 	install -m755 rc.shutdown ${DESTDIR}/etc
