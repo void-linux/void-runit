@@ -24,8 +24,7 @@ if [ -e /etc/crypttab ]; then
     msg "Activating encrypted devices...\n"
     if [ -e /etc/runit/crypt.awk ]; then
         awk -f /etc/runit/crypt.awk /etc/crypttab
-    else:
-        msg_warn "parsing file not found, fallback to dest src filds\n"
+    else
         awk '/^#/ || /^$/ { next }
            NF>2 { print "unsupported crypttab: " $0 >"/dev/stderr"; next}
            { system("cryptsetup luksOpen " $2 " " $1) }' /etc/crypttab

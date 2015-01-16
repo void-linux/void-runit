@@ -22,7 +22,7 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
         ccmd="";
     }
     else {
-    # the option fild is not empty parse the options
+    # the option field is not empty parse the options
         dest=$1
         key=$3
         split($4, opts, ",");
