@@ -1,0 +1,4 @@
+# Default rc.shutdown for void; add your custom commands here.
+#
+# This is run by runit in stage 3 after the services are stopped
+# (see /etc/runit/3).

@@ -16,6 +16,8 @@ msg "Waiting for services to stop...\n"
 sv force-stop /var/service/*
 sv exit /var/service/*
 
+[ -x /etc/rc.shutdown ] && /etc/rc.shutdown
+
 msg "Saving random seed...\n"
 dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 >/dev/null 2>&1
 

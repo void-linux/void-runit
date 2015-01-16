@@ -31,6 +31,7 @@ install:
 	install -m644 functions $(DESTDIR)/etc/runit
 	install -m644 rc.conf ${DESTDIR}/etc
 	install -m755 rc.local ${DESTDIR}/etc
+	install -m755 rc.shutdown ${DESTDIR}/etc
 	install -d ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	install -m644 dracut/*.conf ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	ln -sf /run/runit/reboot ${DESTDIR}/etc/runit/
