@@ -8,6 +8,10 @@ for arg in $(cat /proc/cmdline); do
     case $arg in
         single) echo "Initializing single user mode..."; runlevel=single;;
     esac
+    if [ -d /etc/runit/runsvdir/"$arg" ]; then
+        echo "Runlevel detected: '$arg' (via kernel cmdline)"
+        runlevel="$arg"
+    fi
 done
 
 [ -x /etc/rc.local ] && /etc/rc.local
