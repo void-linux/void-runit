@@ -16,11 +16,9 @@ done
 
 [ -x /etc/rc.local ] && /etc/rc.local
 
-# Create runlevel and then make it the default.
-if [ -d /etc/runit/runsvdir/${runlevel} ]; then
-    mkdir -p /run/runit/runsvdir
-    ln -s /etc/runit/runsvdir/${runlevel} /run/runit/runsvdir/current
-fi
+runsvchdir "${runlevel}"
+mkdir -p /run/runit/runsvdir
+ln -s /etc/runit/runsvdir/current /run/runit/runsvdir/current
 
 exec env - PATH=$PATH \
     runsvdir -P /run/runit/runsvdir/current 'log: ...........................................................................................................................................................................................................................................................................................................................................................................................................'
