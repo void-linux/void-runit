@@ -47,3 +47,11 @@ if [ -z "$VIRTUALIZATION" ]; then
 fi
 
 sync
+
+if [ -z "$VIRTUALIZATION" ]; then
+    if [ -e /run/runit/reboot ] && command -v kexec >/dev/null; then
+        msg "Triggering kexec...\n"
+        kexec -e 2>/dev/null
+	# not reached when kexec was successful.
+    fi
+fi
