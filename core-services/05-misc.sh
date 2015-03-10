@@ -10,7 +10,7 @@ ip link set up dev lo
 if [ -n "$HOSTNAME" ]; then
     echo "$HOSTNAME" > /proc/sys/kernel/hostname
 elif [ -r /etc/hostname ]; then
-    HOSTNAME=$(cat /etc/hostname)
+    read -r HOSTNAME < /etc/hostname
     echo "$HOSTNAME" > /proc/sys/kernel/hostname
 fi
 msg "Setting up hostname to '${HOSTNAME}'...\n"
