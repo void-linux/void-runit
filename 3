@@ -19,7 +19,7 @@ sv exit /var/service/*
 [ -x /etc/rc.shutdown ] && /etc/rc.shutdown
 
 msg "Saving random seed...\n"
-dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 >/dev/null 2>&1
+( umask 077; dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 >/dev/null 2>&1 )
 
 if [ -z "$VIRTUALIZATION" -a -n "$HARDWARECLOCK" ]; then
     hwclock --systohc ${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z)}
