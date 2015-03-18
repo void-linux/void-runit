@@ -6,13 +6,13 @@
 
 extern char *__progname;
 
-typedef enum {NOOP, HALT, REBOOT, POWEROFF} action_t;
+typedef enum {NOOP, HALT, REBOOT, POWEROFF} action_type;
 
 int main(int argc, char *argv[]) {
   int do_sync = 1;
   int do_force = 0;
   int opt;
-  action_t action = NOOP;
+  action_type action = NOOP;
 
   if (strcmp(__progname, "halt") == 0)
     action = HALT;
