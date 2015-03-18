@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
       break;
     case 'w':
       action = NOOP;
+      do_sync = 0;
       break;
     case 'd':
     case 'h':
