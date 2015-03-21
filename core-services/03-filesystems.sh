@@ -22,13 +22,7 @@ fi
 
 if [ -e /etc/crypttab ]; then
     msg "Activating encrypted devices...\n"
-    if [ -e /etc/runit/crypt.awk ]; then
-        awk -f /etc/runit/crypt.awk /etc/crypttab
-    else
-        awk '/^#/ || /^$/ { next }
-           NF>2 { print "unsupported crypttab: " $0 >"/dev/stderr"; next}
-           { system("cryptsetup luksOpen " $2 " " $1) }' /etc/crypttab
-    fi
+    awk -f /etc/runit/crypt.awk /etc/crypttab
 
     if [ -x /sbin/vgchange ]; then
         msg "Activating LVM devices for dm-crypt...\n"
