@@ -2,30 +2,30 @@
 
 [ -n "$VIRTUALIZATION" ] && return 0
 
-msg "Remounting rootfs read-only...\n"
+msg "Remounting rootfs read-only..."
 mount -o remount,ro / || emergency_shell
 
 if [ -x /sbin/dmraid ]; then
-    msg "Activating dmraid devices...\n"
+    msg "Activating dmraid devices..."
     dmraid -i -ay
 fi
 
 if [ -x /bin/btrfs ]; then
-    msg "Activating btrfs devices...\n"
+    msg "Activating btrfs devices..."
     btrfs device scan || emergency_shell
 fi
 
 if [ -x /sbin/vgchange ]; then
-    msg "Activating LVM devices...\n"
+    msg "Activating LVM devices..."
     vgchange --sysinit -a y || emergency_shell
 fi
 
 if [ -e /etc/crypttab ]; then
-    msg "Activating encrypted devices...\n"
+    msg "Activating encrypted devices..."
     awk -f /etc/runit/crypt.awk /etc/crypttab
 
     if [ -x /sbin/vgchange ]; then
-        msg "Activating LVM devices for dm-crypt...\n"
+        msg "Activating LVM devices for dm-crypt..."
         vgchange --sysinit -a y || emergency_shell
     fi
 fi
@@ -40,15 +40,15 @@ for arg in $(cat /proc/cmdline); do
 done
 
 if [ -z "$FASTBOOT" ]; then
-    msg "Checking filesystems:\n"
+    msg "Checking filesystems:"
     fsck -A -T -a -t noopts=_netdev $FORCEFSCK
     if [ $? -gt 1 ]; then
         emergency_shell
     fi
 fi
 
-msg "Mounting rootfs read-write...\n"
+msg "Mounting rootfs read-write..."
 mount -o remount,rw / || emergency_shell
 
-msg "Mounting all non-network filesystems...\n"
+msg "Mounting all non-network filesystems..."
 mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev || emergency_shell
