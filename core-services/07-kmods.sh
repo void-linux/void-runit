@@ -2,6 +2,6 @@
 
 [ -n "$VIRTUALIZATION" ] && return 0
 
-msg "Loading kernel modules...\n"
+msg "Loading kernel modules..."
 modules-load -v ${MODULES} | tr '\n' ' ' | sed 's:insmod [^ ]*/::g; s:\.ko\(\.gz\)\? ::g'
 echo
