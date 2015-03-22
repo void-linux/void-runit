@@ -12,13 +12,13 @@ if [ -e /run/runit/reboot ]; then
 fi
 
 echo
-msg "Waiting for services to stop...\n"
+msg "Waiting for services to stop..."
 sv force-stop /var/service/*
 sv exit /var/service/*
 
 [ -x /etc/rc.shutdown ] && /etc/rc.shutdown
 
-msg "Saving random seed...\n"
+msg "Saving random seed..."
 ( umask 077; dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 >/dev/null 2>&1 )
 
 if [ -z "$VIRTUALIZATION" -a -n "$HARDWARECLOCK" ]; then
@@ -28,21 +28,21 @@ fi
 halt -w  # for utmp
 
 if [ -z "$VIRTUALIZATION" ]; then
-    msg "Stopping udev...\n"
+    msg "Stopping udev..."
     udevadm control --exit
 fi
 
-msg "Sending TERM signal to processes...\n"
+msg "Sending TERM signal to processes..."
 pkill --inverse -s0,1 -TERM
 sleep 1
-msg "Sending KILL signal to processes...\n"
+msg "Sending KILL signal to processes..."
 pkill --inverse -s0,1 -KILL
 
 if [ -z "$VIRTUALIZATION" ]; then
-    msg "Unmounting filesystems, disabling swap...\n"
+    msg "Unmounting filesystems, disabling swap..."
     swapoff -a
     umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
-    msg "Remounting rootfs read-only...\n"
+    msg "Remounting rootfs read-only..."
     mount -o remount,ro /
 fi
 
@@ -50,8 +50,8 @@ sync
 
 if [ -z "$VIRTUALIZATION" ]; then
     if [ -e /run/runit/reboot ] && command -v kexec >/dev/null; then
-        msg "Triggering kexec...\n"
+        msg "Triggering kexec..."
         kexec -e 2>/dev/null
-	# not reached when kexec was successful.
+	    # not reached when kexec was successful.
     fi
 fi

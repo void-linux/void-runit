@@ -5,7 +5,7 @@ PATH=/usr/bin:/usr/sbin
 
 . /etc/runit/functions
 
-msg "Welcome to Void!\n"
+msg "Welcome to Void!"
 
 [ -r /etc/rc.conf ] && . /etc/rc.conf
 
@@ -25,4 +25,4 @@ fi
 mkdir -p /run/runit
 install -m100 /dev/null /run/runit/stopit
 
-msg "Initialization complete, running stage 2...\n"
+msg "Initialization complete, running stage 2..."
