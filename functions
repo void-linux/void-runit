@@ -2,7 +2,7 @@
 
 msg() {
     # bold
-    printf "\033[1m=> $@\033[m"
+    printf "\033[1m=> $@\033[m\n"
 }
 
 msg_ok() {
