@@ -7,13 +7,13 @@ cp /var/lib/random-seed /dev/urandom >/dev/null 2>&1 || true
 msg "Setting up loopback interface...\n"
 ip link set up dev lo
 
+[ -r /etc/hostname ] && read -r HOSTNAME < /etc/hostname
 if [ -n "$HOSTNAME" ]; then
+    msg "Setting up hostname to '${HOSTNAME}'...\n"
     echo "$HOSTNAME" > /proc/sys/kernel/hostname
-elif [ -r /etc/hostname ]; then
-    read -r HOSTNAME < /etc/hostname
-    echo "$HOSTNAME" > /proc/sys/kernel/hostname
+else
+    msg_warn "Didn't setup a hostname!\n"
 fi
-msg "Setting up hostname to '${HOSTNAME}'...\n"
 
 if [ -n "$TIMEZONE" ]; then
     msg "Setting up timezone to '${TIMEZONE}'...\n"
