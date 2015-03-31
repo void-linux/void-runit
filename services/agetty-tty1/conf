@@ -1,0 +1,7 @@
+if [ -x /sbin/getty ]; then
+	# util-linux specific settings
+	GETTY_ARGS="--no-clear"
+fi
+
+baud_rate=38400
+term_name=linux
