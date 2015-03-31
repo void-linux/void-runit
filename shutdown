@@ -42,9 +42,7 @@ if [ "$action" = "cancel" ]; then
   exit
 fi
 
-if ! touch /run/runit/shutdown.pid 2>/dev/null; then
-  abort "Not enough permissions to execute ${0#*/}"
-fi
+touch /run/runit/shutdown.pid 2>/dev/null || abort "Not enough permissions to execute ${0#*/}"
 echo $$ >/run/runit/shutdown.pid
 
 case "$time" in
