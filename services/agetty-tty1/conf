@@ -1,4 +1,4 @@
-if [ -x /sbin/getty ]; then
+if [ -x /sbin/agetty ]; then
 	# util-linux specific settings
 	GETTY_ARGS="--no-clear"
 fi

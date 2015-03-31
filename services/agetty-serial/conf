@@ -1,5 +1,5 @@
 GETTY_ARGS="-L"
-if [ -x /sbin/getty ]; then
+if [ -x /sbin/agetty ]; then
 	# util-linux specific settings
 	GETTY_ARGS="${GETTY_ARGS} -8"
 fi
