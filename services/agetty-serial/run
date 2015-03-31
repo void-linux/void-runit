@@ -1,3 +1,1 @@
-#!/bin/sh
-tty=${PWD##*-}
-exec setsid agetty -8 -L 115200 --noclear $tty vt100
+../agetty-generic/run
