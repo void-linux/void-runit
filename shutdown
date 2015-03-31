@@ -6,14 +6,14 @@ single() {
 }
 
 usage() {
-  echo "Usage: shutdown [-fF] [-kchPr] time [warning message]" >/dev/stderr; exit 1
+  echo "Usage: shutdown [-fF] [-kchPr] time [warning message]" >&2; exit 1
 }
 
 action=single
 
 while getopts akrhPHfFnct: opt; do
   case "$opt" in
-    a|n|H) echo "-$opt is not implemented" >/dev/stderr; exit 1;;
+    a|n|H) echo "-$opt is not implemented" >&2; exit 1;;
     t) ;;
     f) touch /fastboot;;
     F) touch /forcefsck;;
@@ -46,7 +46,7 @@ echo $$ >/run/runit/shutdown.pid
 case "$time" in
   now) time=0;;
   +*) time=${time#+};;
-  *:*) echo "absolute time is not implemented" >/dev/stderr; exit 1;;
+  *:*) echo "absolute time is not implemented" >&2; exit 1;;
   *) echo "invalid time"; exit 1;;
 esac
 
