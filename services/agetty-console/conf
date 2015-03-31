@@ -1,2 +1,2 @@
-baud_rate=38400
-term_name=linux
+BAUD_RATE=38400
+TERM_NAME=linux

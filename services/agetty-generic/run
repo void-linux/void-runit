@@ -12,4 +12,4 @@ elif [ -x /sbin/agetty ]; then
 fi
 
 exec setsid ${GETTY}${GETTY_ARGS:+ $GETTY_ARGS} \
-	"${tty}" "${baud_rate}" "${term_name}"
+	"${tty}" "${BAUD_RATE}" "${TERM_NAME}"

@@ -3,5 +3,5 @@ if [ -x /sbin/getty ]; then
 	GETTY_ARGS="-8 -L"
 fi
 
-baud_rate=115200
-term_name=vt100
+BAUD_RATE=115200
+TERM_NAME=vt100
