@@ -5,15 +5,20 @@ single() {
   runsvchdir single
 }
 
+abort() {
+  echo "$@" >&2
+  exit 1
+}
+
 usage() {
-  echo "Usage: shutdown [-fF] [-kchPr] time [warning message]" >/dev/stderr; exit 1
+  abort "Usage: shutdown [-fF] [-kchPr] time [warning message]"
 }
 
 action=single
 
 while getopts akrhPHfFnct: opt; do
   case "$opt" in
-    a|n|H) echo "-$opt is not implemented" >/dev/stderr; exit 1;;
+    a|n|H) abort "-$opt is not implemented";;
     t) ;;
     f) touch /fastboot;;
     F) touch /forcefsck;;
@@ -24,7 +29,7 @@ while getopts akrhPHfFnct: opt; do
     [?]) usage;;
   esac
 done
-shift $(expr $OPTIND - 1)
+shift $((OPTIND - 1))
 
 [ $# -eq 0 ] && usage
 
@@ -37,33 +42,30 @@ if [ "$action" = "cancel" ]; then
   exit
 fi
 
-if ! touch /run/runit/shutdown.pid 2>/dev/null; then
-  echo "Not enough permissions to execute ${0#*/}"
-  exit 1
-fi
+touch /run/runit/shutdown.pid 2>/dev/null || abort "Not enough permissions to execute ${0#*/}"
 echo $$ >/run/runit/shutdown.pid
 
 case "$time" in
   now) time=0;;
   +*) time=${time#+};;
-  *:*) echo "absolute time is not implemented" >/dev/stderr; exit 1;;
-  *) echo "invalid time"; exit 1;;
+  *:*) abort "absolute time is not implemented";;
+  *) abort "invalid time";;
 esac
 
 if [ "$time" -gt 5 ]; then
   echo "$message in $time minutes" | wall
-  echo -n "shutdown: sleeping for $time minutes... "
-  sleep $(expr '(' "$time" - 5 ')' '*' 60)
-  echo
+  printf "shutdown: sleeping for $time minutes... "
+  sleep $(((time - 5) * 60))
+  printf "\n"
   time=5
 fi
 
 if [ "$time" -gt 0 ]; then
   echo "$message in $time minutes" | wall
   touch /etc/nologin
-  echo -n "shutdown: sleeping for $time minutes... "
-  sleep $(expr "$time" '*' 60)
-  echo
+  printf "shutdown: sleeping for $time minutes... "
+  sleep $((time * 60))
+  printf "\n"
   rm /etc/nologin
 fi
 
