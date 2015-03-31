@@ -5,15 +5,20 @@ single() {
   runsvchdir single
 }
 
+abort() {
+  echo "$@" >&2
+  exit 1
+}
+
 usage() {
-  echo "Usage: shutdown [-fF] [-kchPr] time [warning message]" >&2; exit 1
+  abort "Usage: shutdown [-fF] [-kchPr] time [warning message]"
 }
 
 action=single
 
 while getopts akrhPHfFnct: opt; do
   case "$opt" in
-    a|n|H) echo "-$opt is not implemented" >&2; exit 1;;
+    a|n|H) abort "-$opt is not implemented";;
     t) ;;
     f) touch /fastboot;;
     F) touch /forcefsck;;
@@ -38,16 +43,15 @@ if [ "$action" = "cancel" ]; then
 fi
 
 if ! touch /run/runit/shutdown.pid 2>/dev/null; then
-  echo "Not enough permissions to execute ${0#*/}"
-  exit 1
+  abort "Not enough permissions to execute ${0#*/}"
 fi
 echo $$ >/run/runit/shutdown.pid
 
 case "$time" in
   now) time=0;;
   +*) time=${time#+};;
-  *:*) echo "absolute time is not implemented" >&2; exit 1;;
-  *) echo "invalid time"; exit 1;;
+  *:*) abort "absolute time is not implemented";;
+  *) abort "invalid time";;
 esac
 
 if [ "$time" -gt 5 ]; then
