@@ -56,18 +56,18 @@ esac
 
 if [ "$time" -gt 5 ]; then
   echo "$message in $time minutes" | wall
-  echo -n "shutdown: sleeping for $time minutes... "
+  printf "shutdown: sleeping for $time minutes... "
   sleep $(((time - 5) * 60))
-  echo
+  printf "\n"
   time=5
 fi
 
 if [ "$time" -gt 0 ]; then
   echo "$message in $time minutes" | wall
   touch /etc/nologin
-  echo -n "shutdown: sleeping for $time minutes... "
+  printf "shutdown: sleeping for $time minutes... "
   sleep $((time * 60))
-  echo
+  printf "\n"
   rm /etc/nologin
 fi
 
