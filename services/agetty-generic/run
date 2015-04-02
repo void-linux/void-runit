@@ -2,7 +2,7 @@
 
 tty=${PWD##*-}
 
-[ -r conf ] && . conf
+[ -r conf ] && . ./conf
 
 if [ -x /sbin/getty ]; then
 	# busybox
