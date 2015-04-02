@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     default:
       errx(1, "Usage: %s [-n] [-f]", __progname);
     }
-  
+
   if (do_sync)
     sync();
 
