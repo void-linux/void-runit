@@ -1,11 +1,1 @@
-#!/bin/sh
-tty=${PWD##*-}
-if [ -x /sbin/getty ]; then
-	# busybox
-	GETTY=getty
-elif [ -x /sbin/agetty ]; then
-	# util-linux
-	GETTY=agetty
-	GETTY_ARGS="--noclear"
-fi
-exec setsid $GETTY $GETTY_ARGS $tty 38400 linux
+../agetty-generic/run

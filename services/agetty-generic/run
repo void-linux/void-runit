@@ -1,4 +1,7 @@
 #!/bin/sh
+
+[ -r conf ] && . conf
+
 tty=${PWD##*-}
 if [ -x /sbin/getty ]; then
 	# busybox
@@ -7,4 +10,6 @@ elif [ -x /sbin/agetty ]; then
 	# util-linux
 	GETTY=agetty
 fi
-exec setsid $GETTY $tty 38400 linux
+
+exec setsid ${GETTY}${GETTY_ARGS:+ $GETTY_ARGS} \
+	"${tty}" "${BAUD_RATE}" "${TERM_NAME}"

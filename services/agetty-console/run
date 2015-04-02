@@ -1,7 +1,1 @@
-#!/bin/sh
-if [ -x /sbin/getty ]; then
-	GETTY=getty
-elif [ -x /sbin/agetty ]; then
-	GETTY=agetty
-fi
-exec $GETTY console 38400 linux
+../agetty-generic/run

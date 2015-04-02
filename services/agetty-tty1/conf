@@ -1,0 +1,7 @@
+if [ -x /sbin/agetty ]; then
+	# util-linux specific settings
+	GETTY_ARGS="--no-clear"
+fi
+
+BAUD_RATE=38400
+TERM_NAME=linux
