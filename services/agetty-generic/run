@@ -1,8 +1,9 @@
 #!/bin/sh
 
+tty=${PWD##*-}
+
 [ -r conf ] && . conf
 
-tty=${PWD##*-}
 if [ -x /sbin/getty ]; then
 	# busybox
 	GETTY=getty

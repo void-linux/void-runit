@@ -1,6 +1,8 @@
 if [ -x /sbin/agetty ]; then
 	# util-linux specific settings
-	GETTY_ARGS="--no-clear"
+	if [ "${tty}" = "tty1" ]; then
+		GETTY_ARGS="--noclear"
+	fi
 fi
 
 BAUD_RATE=38400
