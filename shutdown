@@ -18,7 +18,7 @@ action=single
 
 while getopts akrhPHfFnct: opt; do
   case "$opt" in
-    a|n|H) abort "-$opt is not implemented";;
+    a|n|H) abort "'-$opt' is not implemented";;
     t) ;;
     f) touch /fastboot;;
     F) touch /forcefsck;;
