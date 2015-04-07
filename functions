@@ -34,3 +34,22 @@ detect_virt() {
        export VIRTUALIZATION=1
    fi
 }
+
+deactivate_vgs() {
+   _group=${1:-All}
+   if [ -x /sbin/vgchange ]; then
+       vgs=$(vgs|wc -l)
+       if [ $vgs -gt 0 ]; then
+           msg "Deactivating $_group LVM Volume Groups..."
+           vgchange -an
+       fi
+   fi
+}
+
+deactivate_crypt() {
+   if [ -x /sbin/dmsetup ]; then
+       msg "Deactivating Crypt Volumes"
+       dmsetup ls --target crypt --exec 'cryptsetup close'
+       deactivate_vgs "Crypt"
+   fi
+}
