@@ -11,7 +11,7 @@ abort() {
 }
 
 usage() {
-  abort "Usage: shutdown [-fF] [-kchPr] time [warning message]"
+  abort "Usage: ${0##*/} [-fF] [-kchPr] time [warning message]"
 }
 
 action=single
