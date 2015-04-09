@@ -47,7 +47,7 @@ done
 
 case "$ZZZ_MODE" in
   standby) printf freeze >/sys/power/state || fail "standby failed";;
-  suspend) printf >/sys/power/state || fail "suspend failed";;
+  suspend) printf mem >/sys/power/state || fail "suspend failed";;
   hibernate)
 	echo $ZZZ_HIBERNATE_MODE >/sys/power/disk
 	printf disk >/sys/power/state || fail "hibernate failed";;
