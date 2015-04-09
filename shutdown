@@ -11,14 +11,14 @@ abort() {
 }
 
 usage() {
-  abort "Usage: shutdown [-fF] [-kchPr] time [warning message]"
+  abort "Usage: ${0##*/} [-fF] [-kchPr] time [warning message]"
 }
 
 action=single
 
 while getopts akrhPHfFnct: opt; do
   case "$opt" in
-    a|n|H) abort "-$opt is not implemented";;
+    a|n|H) abort "'-$opt' is not implemented";;
     t) ;;
     f) touch /fastboot;;
     F) touch /forcefsck;;

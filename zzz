@@ -39,18 +39,18 @@ test -w /sys/power/state || fail "sleep permission denied"
 (
 flock -n 9 || fail "another instance of zzz is running"
 
-echo -n "Zzzz... "
+printf "Zzzz... "
 
 for hook in /etc/zzz.d/suspend/*; do
   [ -x "$hook" ] && "$hook"
 done
 
 case "$ZZZ_MODE" in
-  standby) echo -n freeze >/sys/power/state || fail "standby failed";;
-  suspend) echo -n mem >/sys/power/state || fail "suspend failed";;
+  standby) printf freeze >/sys/power/state || fail "standby failed";;
+  suspend) printf >/sys/power/state || fail "suspend failed";;
   hibernate)
 	echo $ZZZ_HIBERNATE_MODE >/sys/power/disk
-	echo -n disk >/sys/power/state || fail "hibernate failed";;
+	printf disk >/sys/power/state || fail "hibernate failed";;
   noop) sleep 5;;
 esac
 
