@@ -1,2 +1,4 @@
 #!/bin/sh
-exec setsid sulogin -p </dev/tty1 >/dev/tty1 2>&1
+tty=$(</sys/class/tty/console/active)
+tty=/dev/${tty##* }
+exec setsid sulogin -p < $tty >$tty 2>&1
