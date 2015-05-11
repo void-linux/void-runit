@@ -1,4 +1,3 @@
 #!/bin/sh
-service=$(basename $(pwd))
-tty=${service/*-}
+tty=${PWD##*-}
 exec utmpset -w $tty
