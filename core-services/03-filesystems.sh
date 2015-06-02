@@ -5,7 +5,7 @@
 msg "Remounting rootfs read-only..."
 mount -o remount,ro / || emergency_shell
 
-if [ -x /sbin/dmraid ]; then
+if [ -x /sbin/dmraid -o -x /bin/dmraid ]; then
     msg "Activating dmraid devices..."
     dmraid -i -ay
 fi
@@ -15,7 +15,7 @@ if [ -x /bin/btrfs ]; then
     btrfs device scan || emergency_shell
 fi
 
-if [ -x /sbin/vgchange ]; then
+if [ -x /sbin/vgchange -o -x /bin/vgchange ]; then
     msg "Activating LVM devices..."
     vgchange --sysinit -a y || emergency_shell
 fi
@@ -24,7 +24,7 @@ if [ -e /etc/crypttab ]; then
     msg "Activating encrypted devices..."
     awk -f /etc/runit/crypt.awk /etc/crypttab
 
-    if [ -x /sbin/vgchange ]; then
+    if [ -x /sbin/vgchange -o -x /bin/vgchange ]; then
         msg "Activating LVM devices for dm-crypt..."
         vgchange --sysinit -a y || emergency_shell
     fi

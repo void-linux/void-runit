@@ -37,7 +37,7 @@ detect_virt() {
 
 deactivate_vgs() {
    _group=${1:-All}
-   if [ -x /sbin/vgchange ]; then
+   if [ -x /sbin/vgchange -o -x /bin/vgchange ]; then
        vgs=$(vgs|wc -l)
        if [ $vgs -gt 0 ]; then
            msg "Deactivating $_group LVM Volume Groups..."
@@ -47,7 +47,7 @@ deactivate_vgs() {
 }
 
 deactivate_crypt() {
-   if [ -x /sbin/dmsetup ]; then
+   if [ -x /sbin/dmsetup -o -x /bin/dmsetup ]; then
        msg "Deactivating Crypt Volumes"
        dmsetup ls --target crypt --exec 'cryptsetup close'
        deactivate_vgs "Crypt"
