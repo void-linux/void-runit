@@ -9,7 +9,7 @@ difference that I'm trying to avoid the bash dependency.
 
 - A POSIX shell
 - A POSIX awk
-- procps-ng (needs pkill -s0,1 and sysctl --system)
+- procps-ng (needs pkill -s0,1)
 - runit
 
 ### How to use it
