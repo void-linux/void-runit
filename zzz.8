@@ -16,7 +16,8 @@ is a simple script to suspend or hibernate your computer.
 It supports hooks before and after suspending.
 .Bl -tag -width indent
 .It Fl n
-dry-run mode.  Instead of performing an ACPI action,
+dry-run mode.
+Instead of performing an ACPI action,
 .Nm
 will just sleep for a few seconds.
 .It Fl S
@@ -30,8 +31,8 @@ Enter hibernate to disk mode (ACPI S4, kernel name "disk") and power off.
 This is the default for
 .Nm ZZZ .
 .It Fl R
-Enter hibernate to disk mode and reboot.  This can be used to switch
-operating systems.
+Enter hibernate to disk mode and reboot.
+This can be used to switch operating systems.
 .El
 .Sh FILES
 Before suspending,
@@ -57,20 +58,22 @@ and
 .It suspend/hibernate not supported
 The hardware does not support ACPI S3/S4 with this kernel.
 .It sleep permission denied
-You lack sufficent privilege to write to 
+You lack sufficent privilege to write to
 .Pa /sys/power/state .
 .It another instance of zzz is running
 .Nm
 locks
 .Pa /sys/power
-during operation.  Perhaps a hook is stuck?
+during operation.
+Perhaps a hook is stuck?
 .It Zzzz... yawn.
-The system has woken up again.  Everything is fine.
+The system has woken up again.
+Everything is fine.
 You feel refreshed.
 .Sh SEE ALSO
-.Xr s2ram 8 ,
-.Xr s2disk 8 ,
 .Xr pm-action 8 ,
+.Xr s2disk 8 ,
+.Xr s2ram 8 ,
 OpenBSD's
 .Xr apm 8
 .Sh HISTORY
