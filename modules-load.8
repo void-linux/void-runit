@@ -1,0 +1,52 @@
+.Dd June 1, 2016
+.Dt MODULES-LOAD 8
+.Os Linux
+.Sh NAME
+.Nm modules-load
+.Nd Configure kernel modules to load at boot
+.Sh SYNOPSIS
+.Nm modules-load
+.Op Fl nv
+.Sh DESCRIPTION
+.Nm
+reads files which contain kernel modules to load during boot from the list of
+locations below.
+.Bl -tag -width indent
+.It Fl n
+dry-run mode.
+This option does everything but actually insert or delete the modules.
+.It Fl v
+verbose mode.
+Print messages about what the program is doing.
+.El
+.Sh FILES
+Configuration files are read from the following locations:
+.Bl -tag -width indent
+.It /etc/modules-load.d/*.conf
+.It /run/modules-load.d/*.conf
+.It /usr/lib/modules-load.d/*.conf
+.El
+.Pp
+The configuration files should simply contain a list of kernel module names
+to load, separated by newlines.
+Empty lines and lines whose first non-whitespace character is # or ; are
+ignored.
+.Sh EXAMPLES
+.Pa /etc/modules-load.d/virtio-net.conf :
+.Bd -literal -offset indent
+# Load virtio-net.ko at boot
+virtio-net
+.Ed
+.Sh SEE ALSO
+.Xr modprobe 8
+.Sh HISTORY
+This program is a replacement for the
+.Nm modules-load
+utility provided by
+.Nm systemd .
+.Sh AUTHOR
+.An Christian Neukirchen ,
+.Mt chneukirchen@gmail.com .
+.Sh LICENSE
+.Nm
+is in the public domain.
