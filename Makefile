@@ -4,6 +4,7 @@ SCRIPTS=	1 2 3 ctrlaltdel
 all:
 	$(CC) $(CFLAGS) halt.c -o halt $(LDFLAGS)
 	$(CC) $(CFLAGS) pause.c -o pause $(LDFLAGS)
+	$(CC) $(CFLAGS) vlogger.c -o vlogger $(LDFLAGS)
 
 install:
 	install -d ${DESTDIR}/${PREFIX}/sbin
@@ -22,6 +23,7 @@ install:
 	install -m644 shutdown.8 ${DESTDIR}/${PREFIX}/share/man/man8
 	install -m644 halt.8 ${DESTDIR}/${PREFIX}/share/man/man8
 	install -m644 modules-load.8 ${DESTDIR}/${PREFIX}/share/man/man8
+	install -m644 vlogger.8 ${DESTDIR}/${PREFIX}/share/man/man8
 	ln -sf halt.8 ${DESTDIR}/${PREFIX}/share/man/man8/poweroff.8
 	ln -sf halt.8 ${DESTDIR}/${PREFIX}/share/man/man8/reboot.8
 	install -d ${DESTDIR}/etc/sv

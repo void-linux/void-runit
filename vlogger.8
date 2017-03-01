@@ -1,0 +1,138 @@
+.Dd March 1, 2017
+.Dt VLOGGER 8
+.Os Linux
+.Sh NAME
+.Nm vlogger
+.Nd log messages to syslog or an arbitrary executable
+.Sh SYNOPSIS
+.Nm vlogger
+.Op Fl p Ar priority
+.Op Fl t Ar tag
+.Sh DESCRIPTION
+By default,
+.Nm
+reads lines from
+.Dv stdin
+and sends them to syslog.
+If the file
+.Pa /etc/vlogger
+exists and is executable it is executed with
+.Ar tag
+as only argument and replaces
+.Nm .
+.Pp
+If
+.Nm
+is executed as a log service for runit or another daemontools like
+supervision suite it uses the service name as default
+.Ar tag .
+As example if
+.Nm
+is linked to
+.Dv /var/service/foo/log/run
+it uses
+.Dv foo
+as default
+.Ar tag .
+.Bl -tag -width indent
+.It Fl p Ar priority
+The.
+.Ar priority
+can be
+.Pa facility.level
+or just
+.Pa facility .
+See
+.Sx FACILITIES ,
+.Sx LEVELS
+or
+.Xr syslog 3 .
+The default is
+.Pa daemon.info .
+.It Fl t Ar tag
+Defines the
+.Xr openlog 3
+.Pa ident
+which is used as prefix for each log message or passed as first argument to
+.Pa /etc/vlogger .
+.El
+.Sh FACILITIES
+.Bl -tag -width 11n -compact
+.It auth
+.It authpriv
+.It cron
+.It daemon
+.It ftp
+.It kern
+can not be used from userspace replaced with
+.Pa daemon .
+.It lpr
+.It mail
+.It news
+.It syslog
+.It user
+.It uucp
+.It local[0-7]
+.It security
+deprecated synonym for
+.Pa auth.
+.El
+.Sh LEVELS
+.Bl -tag -width 11n -compact
+.It emerg
+.It alert
+.It crit
+.It err
+.It warning
+.It notice
+.It info
+.It debug
+.It panic
+deprecated synonym for
+.Pa emerg .
+.It error
+deprecated synonym for
+.Ar err .
+.It warn
+deprecated synonym for
+.Pa warning .
+.El
+.Sh FILES
+.Bl -tag -width indent
+.It /etc/vlogger
+An optional executable file that is used to to handle the messages.
+It is executed with
+.Ar tag
+as first argument and replaces the
+.Nm
+process.
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh EXAMPLES
+.Pa /etc/vlogger :
+.Bd -literal -offset indent
+#!/bin/sh
+exec svlogd /var/log/$1
+.Ed
+.Sh SEE ALSO
+.Xr logger 1 ,
+.Xr syslog 3 ,
+.Xr svlogd 8
+.Sh HISTORY
+This program is a replacement for the
+.Nm logger
+utility provided by
+.Nm util-linux .
+.Sh AUTHOR
+.An Duncan Overbruck Aq Mt mail@duncano.de
+.Sh LICENSE
+.Nm
+is in the public domain.
+.Pp
+To the extent possible under law,
+the creator of this work
+has waived all copyright and related or
+neighboring rights to this work.
+.Pp
+.Lk http://creativecommons.org/publicdomain/zero/1.0/
