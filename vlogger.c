@@ -4,7 +4,7 @@
 #include <syslog.h>
 #include <unistd.h>
 
-typedef struct _code {
+typedef struct {
   const char *const c_name;
   int c_val;
 } CODE;
