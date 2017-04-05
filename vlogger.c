@@ -74,9 +74,11 @@ strpriority(char *s, int *facility, int *level)
 int
 main(int argc, char *argv[])
 {
-	char c, *p;
+	char c, *p, *argv0;
 	int facility = LOG_DAEMON;
 	int level = LOG_INFO;
+
+	argv0 = *argv;
 
 	if (((p = strrchr(*argv, '/')) && !strncmp(p+1, "run", 3)) &&
 	    (*p = 0, (p = strrchr(*argv, '/')) && !strncmp(p+1, "log", 3)) &&
@@ -94,7 +96,7 @@ main(int argc, char *argv[])
 		}
 
 	if (access("/etc/vlogger", X_OK) != -1)
-		execl("/etc/vlogger", "/etc/vlogger", tag, (char *)0);
+		execl("/etc/vlogger", argv0, tag, (char *)0);
 
 	openlog(tag, 0, facility);
 
