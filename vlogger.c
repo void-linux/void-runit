@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,8 +50,6 @@ CODE facilitynames[] = {
 	{ 0, -1 }
 };
 
-static char *tag;
-
 static void
 strpriority(char *s, int *facility, int *level)
 {
@@ -74,7 +73,7 @@ strpriority(char *s, int *facility, int *level)
 int
 main(int argc, char *argv[])
 {
-	char c, *p, *argv0;
+	char c, *p, *argv0, *tag;
 	int facility = LOG_DAEMON;
 	int level = LOG_INFO;
 
@@ -83,7 +82,10 @@ main(int argc, char *argv[])
 	if (((p = strrchr(*argv, '/')) && !strncmp(p+1, "run", 3)) &&
 	    (*p = 0, (p = strrchr(*argv, '/')) && !strncmp(p+1, "log", 3)) &&
 	    (*p = 0, (p = strrchr(*argv, '/'))) != 0) {
-		tag = strdup(p+1);
+		if (!(tag = strdup(p+1))) {
+			fprintf(stderr, "vlogger: strdup: %s\n", strerror(errno));
+			exit(1);
+		}
 	}
 
 	while ((c = getopt(argc, argv, "p:t:")) != -1)
