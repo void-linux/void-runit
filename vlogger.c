@@ -97,8 +97,11 @@ main(int argc, char *argv[])
 			exit(1);
 		}
 
-	if (access("/etc/vlogger", X_OK) != -1)
+	if (access("/etc/vlogger", X_OK) != -1) {
 		execl("/etc/vlogger", argv0, tag, (char *)0);
+		fprintf(stderr, "vlogger: exec: %s\n", strerror(errno));
+		exit(1);
+	}
 
 	openlog(tag, 0, facility);
 
