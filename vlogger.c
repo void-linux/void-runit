@@ -4,6 +4,9 @@
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <limits.h>
+
+static char pwd[PATH_MAX + 1];
 
 typedef struct {
   const char *const c_name;
@@ -73,18 +76,34 @@ strpriority(char *s, int *facility, int *level)
 int
 main(int argc, char *argv[])
 {
-	char c, *p, *argv0, *tag;
+	char c, *p, *argv0;
+	char *tag = "vlogger";
 	int facility = LOG_DAEMON;
 	int level = LOG_INFO;
+	size_t pwdlen = 0;
 
 	argv0 = *argv;
 
-	if (((p = strrchr(*argv, '/')) && !strncmp(p+1, "run", 3)) &&
-	    (*p = 0, (p = strrchr(*argv, '/')) && !strncmp(p+1, "log", 3)) &&
-	    (*p = 0, (p = strrchr(*argv, '/'))) != 0) {
-		if (!(tag = strdup(p+1))) {
-			fprintf(stderr, "vlogger: strdup: %s\n", strerror(errno));
+	if (!strcmp(argv0, "./run")) {
+		p = getcwd(pwd, sizeof(pwd));
+		if (p == NULL) {
+/* FIXME: roll our own getcwd that does dynamic allocation? */
+			fprintf(stderr, "vlogger: getcwd: %s\n", strerror(errno));
 			exit(1);
+		}
+		if (pwd[0] != '/') {
+			fprintf(stderr, "Current working directory is not reachable or not absolute.\n");
+			exit(1);
+		}
+		pwdlen = strlen(pwd);
+		if (pwd[pwdlen - 1] == '/')
+			pwd[pwdlen - 1] = '\0';
+		if ((p = strrchr(pwd, '/')) && !strncmp(p+1, "log", 3) &&
+		    (*p = 0, (p = strrchr(pwd, '/'))) && (*(p + 1) != 0)) {
+			if (!(tag = strdup(p+1))) {
+				fprintf(stderr, "vlogger: strdup: %s\n", strerror(errno));
+				exit(1);
+			}
 		}
 	}
 
