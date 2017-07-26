@@ -37,7 +37,7 @@ time=$1; shift
 message="${*:-system is going down}"
 
 if [ "$action" = "cancel" ]; then
-  kill $(cat /run/runit/shutdown.pid)
+  kill "$(cat /run/runit/shutdown.pid)"
   if [ -e /etc/nologin ] && ! [ -s /etc/nologin ]; then
     rm /etc/nologin
   fi
