@@ -6,7 +6,7 @@ single() {
 }
 
 abort() {
-  echo "$@" >&2
+  printf '%s\n' "$1" >&2
   exit 1
 }
 
@@ -59,15 +59,15 @@ for break in 5 0; do
   [ "$time" -gt "$break" ] || continue
   [ "$break" = 0 ] && touch /etc/nologin
 
-  echo "$message in $time minutes" | wall
-  printf "shutdown: sleeping for $(( time - break )) minutes... "
+  printf '%s in %s minutes\n' "$message" "$time" | wall
+  printf 'shutdown: sleeping for %s minutes... ' "$(( time - break ))"
   sleep $(( (time - break) * 60 ))
   time="$break"
-  printf "\n"
+  printf '\n'
 
   [ "$break" = 0 ] && rm /etc/nologin
 done
 
-echo "$message NOW" | wall
+printf '%s NOW\n' "$message" | wall
 
 $action
