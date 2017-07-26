@@ -55,22 +55,18 @@ case "$time" in
   *) abort "invalid time";;
 esac
 
-if [ "$time" -gt 5 ]; then
-  echo "$message in $time minutes" | wall
-  printf "shutdown: sleeping for $time minutes... "
-  sleep $(((time - 5) * 60))
-  printf "\n"
-  time=5
-fi
+for break in 5 0; do
+  [ "$time" -gt "$break" ] || continue
+  [ "$break" = 0 ] && touch /etc/nologin
 
-if [ "$time" -gt 0 ]; then
   echo "$message in $time minutes" | wall
-  touch /etc/nologin
-  printf "shutdown: sleeping for $time minutes... "
-  sleep $((time * 60))
+  printf "shutdown: sleeping for $(( time - break )) minutes... "
+  sleep $(( (time - break) * 60 ))
+  time="$break"
   printf "\n"
-  rm /etc/nologin
-fi
+
+  [ "$break" = 0 ] && rm /etc/nologin
+done
 
 echo "$message NOW" | wall
 
