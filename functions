@@ -49,7 +49,9 @@ deactivate_vgs() {
 deactivate_crypt() {
    if [ -x /sbin/dmsetup -o -x /bin/dmsetup ]; then
        msg "Deactivating Crypt Volumes"
-       dmsetup ls --target crypt --exec 'cryptsetup close'
+       for v in $(dmsetup ls --target crypt --exec "dmsetup info -c --noheadings -o open,name"); do
+           [ ${v%%:*} -eq 0 ] && cryptsetup close ${v##*:}
+       done
        deactivate_vgs "Crypt"
    fi
 }
