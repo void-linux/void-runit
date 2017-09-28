@@ -1,4 +1,4 @@
-if [ -x /sbin/agetty -o /bin/agetty ]; then
+if [ -x /sbin/agetty -o -x /bin/agetty ]; then
 	# util-linux specific settings
 	if [ "${tty}" = "tty1" ]; then
 		GETTY_ARGS="--noclear"
