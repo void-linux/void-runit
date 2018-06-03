@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <limits.h>
 
-static char pwd[PATH_MAX + 1];
+static char pwd[PATH_MAX];
 
 typedef struct {
   const char *const c_name;
@@ -77,32 +77,20 @@ int
 main(int argc, char *argv[])
 {
 	char c, *p, *argv0;
-	char *tag = "vlogger";
+	char *tag = NULL;
 	int facility = LOG_DAEMON;
 	int level = LOG_INFO;
-	size_t pwdlen = 0;
 
 	argv0 = *argv;
 
-	if (!strcmp(argv0, "./run")) {
-		p = getcwd(pwd, sizeof(pwd));
-		if (p == NULL) {
-/* FIXME: roll our own getcwd that does dynamic allocation? */
-			fprintf(stderr, "vlogger: getcwd: %s\n", strerror(errno));
-			exit(1);
-		}
-		if (pwd[0] != '/') {
-			fprintf(stderr, "Current working directory is not reachable or not absolute.\n");
-			exit(1);
-		}
-		pwdlen = strlen(pwd);
-		if (pwd[pwdlen - 1] == '/')
-			pwd[pwdlen - 1] = '\0';
-		if ((p = strrchr(pwd, '/')) && !strncmp(p+1, "log", 3) &&
-		    (*p = 0, (p = strrchr(pwd, '/'))) && (*(p + 1) != 0)) {
-			if (!(tag = strdup(p+1))) {
-				fprintf(stderr, "vlogger: strdup: %s\n", strerror(errno));
-				exit(1);
+	if (strcmp(argv0, "./run") == 0) {
+		p = getcwd(pwd, sizeof (pwd));
+		if (p != NULL && *pwd == '/') {
+			if (*(p = pwd+(strlen(pwd)-1)) == '/')
+				*p = '\0';
+			if ((p = strrchr(pwd, '/')) && strncmp(p+1, "log", 3) == 0 &&
+			    (*p = '\0', (p = strrchr(pwd, '/'))) && (*(p+1) != '\0')) {
+				tag = strdup(p+1);
 			}
 		}
 	}
@@ -112,9 +100,13 @@ main(int argc, char *argv[])
 		case 'p': strpriority(optarg, &facility, &level); break;
 		case 't': tag = optarg; break;
 		default:
+usage:
 			fprintf(stderr, "usage: vlogger [-p priority] [-t tag]\n");
 			exit(1);
 		}
+
+	if (tag == NULL)
+		goto usage;
 
 	if (access("/etc/vlogger", X_OK) != -1) {
 		execl("/etc/vlogger", argv0, tag, (char *)0);
@@ -129,7 +121,7 @@ main(int argc, char *argv[])
 	ssize_t rd;
 	while ((rd = getline(&line, &linelen, stdin)) != -1) {
 		if (line[rd-1] == '\n')
-			line[rd-1] = 0;
+			line[rd-1] = '\0';
 		syslog(level|facility, "%s", line);
 	}
 
