@@ -44,6 +44,6 @@ install:
 	cp -R --no-dereference --preserve=mode,links -v services/* ${DESTDIR}/etc/sv/
 
 clean:
-	-rm -f halt pause
+	-rm -f halt pause vlogger
 
 .PHONY: all install clean
