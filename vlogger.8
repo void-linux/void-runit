@@ -128,8 +128,12 @@ deprecated synonym for
 .It /etc/vlogger
 An optional executable file that is used to to handle the messages.
 It is executed with
-.Ar tag
-as first argument and replaces the
+.Ar tag ,
+.Ar level
+and
+.Ar facility
+as arguments
+and replaces the
 .Nm
 process.
 .El

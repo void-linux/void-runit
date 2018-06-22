@@ -112,7 +112,17 @@ usage:
 		}
 
 	if (!Sflag && access("/etc/vlogger", X_OK) != -1) {
-		execl("/etc/vlogger", argv0, tag, (char *)0);
+		CODE *cp;
+		const char *sfacility, *slevel;
+		for (cp = prioritynames; cp->c_name; cp++) {
+			if (cp->c_val == level)
+				slevel = cp->c_name;
+		}
+		for (cp = facilitynames; cp->c_name; cp++) {
+			if (cp->c_val == facility)
+				sfacility = cp->c_name;
+		}
+		execl("/etc/vlogger", argv0, tag, slevel, sfacility, (char *)0);
 		fprintf(stderr, "vlogger: exec: %s\n", strerror(errno));
 		exit(1);
 	}
