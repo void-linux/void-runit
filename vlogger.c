@@ -113,9 +113,11 @@ main(int argc, char *argv[])
 		case 's': logflags |= LOG_PERROR; break;
 		case 't': tag = optarg; break;
 		default:
-			fprintf(stderr, "usage: vlogger [-isS] [-f file] [-p pri] [-t tag]\n");
+			fprintf(stderr, "usage: vlogger [-isS] [-f file] [-p pri] [-t tag] [message ...]\n");
 			exit(1);
 		}
+	argc -= optind;
+	argv += optind;
 
 	if (!Sflag && access("/etc/vlogger", X_OK) != -1) {
 		CODE *cp;
@@ -134,6 +136,35 @@ main(int argc, char *argv[])
 	}
 
 	openlog(tag, logflags, facility);
+
+	if (argc > 0) {
+		size_t len;
+		char *p, *e;
+		p = buf;
+		*p = '\0';
+		e = e = buf + sizeof buf - 2;
+		for (; *argv;) {
+			len = strlen(*argv);
+			if (p + len > e && p > buf) {
+				syslog(level|facility, "%s", buf);
+				p = buf;
+				*p = '\0';
+			}
+			if (len > sizeof buf - 1) {
+				syslog(level|facility, "%s", *argv++);
+			} else {
+				if (p != buf) {
+					*p++ = ' ';
+					*p = '\0';
+				}
+				strncat(p, *argv++, e-p);
+				p += len;
+			}
+		}
+		if (p != buf)
+			syslog(level|facility, "%s", buf);
+		return 0;
+	}
 
 	while (fgets(buf, sizeof buf, stdin) != NULL)
 		syslog(level|facility, "%s", buf);
