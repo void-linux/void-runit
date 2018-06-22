@@ -76,8 +76,9 @@ strpriority(char *s, int *facility, int *level)
 int
 main(int argc, char *argv[])
 {
-	char c, *p, *argv0;
+	char *p, *argv0;
 	char *tag = NULL;
+	int c;
 	int facility = LOG_DAEMON;
 	int level = LOG_INFO;
 
@@ -116,7 +117,7 @@ usage:
 
 	openlog(tag, 0, facility);
 
-	char *line;
+	char *line = NULL;
 	size_t linelen = 0;
 	ssize_t rd;
 	while ((rd = getline(&line, &linelen, stdin)) != -1) {
