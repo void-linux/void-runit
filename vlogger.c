@@ -169,5 +169,5 @@ main(int argc, char *argv[])
 	while (fgets(buf, sizeof buf, stdin) != NULL)
 		syslog(level|facility, "%s", buf);
 
-	return 1;
+	return 0;
 }
