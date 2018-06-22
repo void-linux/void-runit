@@ -76,6 +76,7 @@ strpriority(char *s, int *facility, int *level)
 int
 main(int argc, char *argv[])
 {
+	char buf[1024];
 	char *p, *argv0;
 	char *tag = "vlogger";
 	int c;
@@ -98,16 +99,21 @@ main(int argc, char *argv[])
 		}
 	}
 
-	while ((c = getopt(argc, argv, "ip:Sst:")) != -1)
+	while ((c = getopt(argc, argv, "f:ip:Sst:")) != -1)
 		switch (c) {
+		case 'f':
+			if (freopen(optarg, "r", stdin) == NULL) {
+				fprintf(stderr, "vlogger: %s: %s\n", optarg, strerror(errno));
+				return 1;
+			}
+			break;
 		case 'i': logflags |= LOG_PID; break;
 		case 'p': strpriority(optarg, &facility, &level); break;
 		case 'S': Sflag++; break;
 		case 's': logflags |= LOG_PERROR; break;
 		case 't': tag = optarg; break;
 		default:
-usage:
-			fprintf(stderr, "usage: vlogger [-isS] [-p pri] [-t tag]\n");
+			fprintf(stderr, "usage: vlogger [-isS] [-f file] [-p pri] [-t tag]\n");
 			exit(1);
 		}
 
@@ -129,14 +135,8 @@ usage:
 
 	openlog(tag, logflags, facility);
 
-	char *line = NULL;
-	size_t linelen = 0;
-	ssize_t rd;
-	while ((rd = getline(&line, &linelen, stdin)) != -1) {
-		if (line[rd-1] == '\n')
-			line[rd-1] = '\0';
-		syslog(level|facility, "%s", line);
-	}
+	while (fgets(buf, sizeof buf, stdin) != NULL)
+		syslog(level|facility, "%s", buf);
 
 	return 1;
 }

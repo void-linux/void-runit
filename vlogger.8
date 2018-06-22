@@ -7,6 +7,7 @@
 .Sh SYNOPSIS
 .Nm vlogger
 .Op Fl isS
+.Op Fl f Ar file
 .Op Fl p Ar pri
 .Op Fl t Ar tag
 .Sh DESCRIPTION
@@ -40,20 +41,10 @@ as default
 .Pp
 The options are as follows:
 .Bl -tag -width indent
-.It Fl S
-Force
-.Nm
-to use
-.Xr syslog 3
-even if
-.Pa /etc/vlogger
-exists.
-.It Fl s
-Output the message to standard error, as well as
-.Xr syslog 3 .
-Only supported if
-.Xr syslog 3
-is used.
+.It Fl f Ar file
+Read lines from the specified
+.Ar file .
+This
 .It Fl i
 Log the PID of the
 .Nm
@@ -75,6 +66,20 @@ or
 .Xr syslog 3 .
 The default is
 .Pa daemon.info .
+.It Fl S
+Force
+.Nm
+to use
+.Xr syslog 3
+even if
+.Pa /etc/vlogger
+exists.
+.It Fl s
+Output the message to standard error, as well as
+.Xr syslog 3 .
+Only supported if
+.Xr syslog 3
+is used.
 .It Fl t Ar tag
 Defines the
 .Xr openlog 3
