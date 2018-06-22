@@ -77,7 +77,7 @@ int
 main(int argc, char *argv[])
 {
 	char *p, *argv0;
-	char *tag = NULL;
+	char *tag = "vlogger";
 	int c;
 	int facility = LOG_DAEMON;
 	int level = LOG_INFO;
@@ -105,9 +105,6 @@ usage:
 			fprintf(stderr, "usage: vlogger [-p priority] [-t tag]\n");
 			exit(1);
 		}
-
-	if (tag == NULL)
-		goto usage;
 
 	if (access("/etc/vlogger", X_OK) != -1) {
 		execl("/etc/vlogger", argv0, tag, (char *)0);
