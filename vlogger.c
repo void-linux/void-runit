@@ -79,6 +79,8 @@ main(int argc, char *argv[])
 	char *p, *argv0;
 	char *tag = "vlogger";
 	int c;
+	int Sflag = 0;
+	int logflags = 0;
 	int facility = LOG_DAEMON;
 	int level = LOG_INFO;
 
@@ -96,23 +98,26 @@ main(int argc, char *argv[])
 		}
 	}
 
-	while ((c = getopt(argc, argv, "p:t:")) != -1)
+	while ((c = getopt(argc, argv, "ip:Sst:")) != -1)
 		switch (c) {
+		case 'i': logflags |= LOG_PID; break;
 		case 'p': strpriority(optarg, &facility, &level); break;
+		case 'S': Sflag++; break;
+		case 's': logflags |= LOG_PERROR; break;
 		case 't': tag = optarg; break;
 		default:
 usage:
-			fprintf(stderr, "usage: vlogger [-p priority] [-t tag]\n");
+			fprintf(stderr, "usage: vlogger [-isS] [-p pri] [-t tag]\n");
 			exit(1);
 		}
 
-	if (access("/etc/vlogger", X_OK) != -1) {
+	if (!Sflag && access("/etc/vlogger", X_OK) != -1) {
 		execl("/etc/vlogger", argv0, tag, (char *)0);
 		fprintf(stderr, "vlogger: exec: %s\n", strerror(errno));
 		exit(1);
 	}
 
-	openlog(tag, 0, facility);
+	openlog(tag, logflags, facility);
 
 	char *line = NULL;
 	size_t linelen = 0;

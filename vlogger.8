@@ -6,7 +6,8 @@
 .Nd log messages to syslog or an arbitrary executable
 .Sh SYNOPSIS
 .Nm vlogger
-.Op Fl p Ar priority
+.Op Fl isS
+.Op Fl p Ar pri
 .Op Fl t Ar tag
 .Sh DESCRIPTION
 By default,
@@ -36,10 +37,33 @@ it uses
 .Dv foo
 as default
 .Ar tag .
+.Pp
+The options are as follows:
 .Bl -tag -width indent
-.It Fl p Ar priority
+.It Fl S
+Force
+.Nm
+to use
+.Xr syslog 3
+even if
+.Pa /etc/vlogger
+exists.
+.It Fl s
+Output the message to standard error, as well as
+.Xr syslog 3 .
+Only supported if
+.Xr syslog 3
+is used.
+.It Fl i
+Log the PID of the
+.Nm
+process.
+Only supported if
+.Xr syslog 3
+is used.
+.It Fl p Ar pri
 The.
-.Ar priority
+.Ar pri
 can be
 .Pa facility.level
 or just
