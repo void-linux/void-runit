@@ -121,7 +121,7 @@ main(int argc, char *argv[])
 
 	if (!Sflag && access("/etc/vlogger", X_OK) != -1) {
 		CODE *cp;
-		const char *sfacility, *slevel;
+		const char *sfacility = "", *slevel = "";
 		for (cp = prioritynames; cp->c_name; cp++) {
 			if (cp->c_val == level)
 				slevel = cp->c_name;
