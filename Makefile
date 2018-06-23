@@ -10,6 +10,7 @@ install:
 	install -d ${DESTDIR}/${PREFIX}/sbin
 	install -m755 halt ${DESTDIR}/${PREFIX}/sbin
 	install -m755 pause ${DESTDIR}/${PREFIX}/sbin
+	install -m755 vlogger ${DESTDIR}/${PREFIX}/sbin
 	install -m755 shutdown ${DESTDIR}/${PREFIX}/sbin/shutdown
 	install -m755 modules-load ${DESTDIR}/${PREFIX}/sbin/modules-load
 	install -m755 zzz ${DESTDIR}/${PREFIX}/sbin
