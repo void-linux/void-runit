@@ -1,0 +1,149 @@
+.Dd October 31, 2018
+.Dt void-runit 8
+.Os
+.Sh NAME
+.Nm void-runit
+.Nd information about Void Linux implementation of runit
+.Sh SYNOPSIS
+.Nm kernel
+.Op Ar preceding kernel parameters ...
+.Op Cm void.runit_readproctitle= Ns Ar 0|1
+.Op Ar void_runsvdir
+.Op Ar succeeding kernel parameters ...
+.Sh DESCRIPTION
+Void Linux uses
+.Xr runit 8
+as it's default
+.Xr init 8
+system.
+.Pp
+Like in case of any other
+Linux based operating system, original
+.Xr runit 8
+init scripts have been slightly modified
+to better suit Void's needs.
+.Pp
+Void's
+.Xr runit 8
+usually does right thing
+on it's own, by default, but you
+are free to tweak its execution to better
+match your installation requirements.
+.Pp
+This can be done by passing
+.Nm
+arguments through kernel command line to
+.Xr runit 8 Ns .
+.Pp
+Currently following arguments are supported:
+.Bl -tag -width "     "
+.It  Cm void.runit_readproctitle= Ns Ar 0|1
+Disables
+.Xr runsvdir 8
+.Xr readproctitle 8 Ns Ap Ns
+s
+.Ar log
+functionality.
+.Pp
+This might be desirable on systems where many
+.Xr runit 8
+services are damaged and are logging too many
+error messages per send, causing
+.Xr runsvdir 8
+to consume excessive amounts of cpu time or
+when system's operator is using other tools to
+capture uncaught system log messages.
+.It Ar void_runsvdir
+This is name of specific subdirectory within
+.Pa /etc/runit/runsvdir Ns .
+.Pp
+For
+.Xr runit 8
+it means same thing what
+.Sy runlevel
+or
+.Sy target
+means in other
+.Xr init 8
+schemes (like system V init or systemd for example).
+.Pp
+Eg. if you set
+.Ar void_runsvdir
+to
+.Sy default
+then
+.Xr runit 8
+will try to boot into
+.Pa /etc/runit/runsvdir/default
+directory (aka runlevel).
+.Pp
+Similarly if you set it to
+.Sy single
+then
+.Xr runit 8
+will boot into
+.Pa /etc/runit/runsvdir/single Ns ,
+which represents
+.Sy single user mode Ns .
+.Pp
+There is no limit in number of
+.Sy runsvdirs
+(aka runlevels, targets) you can create,
+but these
+.Sy runsvdir
+names are reserved by Void:
+.Pp
+.Bl -tag -width "  " -compact
+.It  Cm default
+.Sy runsvdir
+into which Void boots by
+default.
+.It  Cm single
+Void boots into this
+.Sy runsvdir
+when boot error occurs (or when specifically
+requsted by operator on kernel command line).
+.It  Cm current
+Symlink to currently active
+.Sy runsvdir
+on a running system.
+.El
+.Pp
+If not specified,
+.Sy default
+is assumed.
+.Sh EXIT STATUS
+Not applicable.
+.Sh EXAMPLES
+.Bd -literal -offset 0
+vmlinuz-4.66.1_7 rw void.runit_readproctitle=0 single
+.Ed
+.Sh SEE ALSO
+.Xr runit 8 ,
+.Xr init 8 ,
+.Xr runsvdir 8 ,
+.Xr runsvchdir 8 ,
+.Xr sv 8 ,
+.Xr runsv 8
+.Sh HISTORY
+This manpage was written when
+.Cm void.runit_readproctitle=
+boot parameter was added to official
+.Nm 2
+(Void's runit stage 2) script of
+.Nm void-runit
+scripts package.
+.Sh AUTHORS
+.An Leah Neukirchen Aq Mt leah@vuxu.org .
+.An Duncan Overbruck Aq Mt mail@duncano.de
+.An Martin Mišúth Aq Mt et.code@ethome.sk
+.Sh LICENSE
+.Nm
+is in the public domain.
+.Pp
+To the extent possible under law,
+the creator of this work
+has waived all copyright and related or
+neighboring rights to this work.
+.Pp
+.Lk http://creativecommons.org/publicdomain/zero/1.0/
