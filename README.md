@@ -18,7 +18,7 @@ runit is used by default in the Void distribution.
     
 To see enabled services for "current" runlevel:
 
-    $ ls -l /var/service
+    $ ls -l /var/service/
 
 To see available runlevels (default and single, which just runs sulogin):
 
