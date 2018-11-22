@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+# usage: dirname to search for files in
+test -n "$1"
+dir="${1}"
+
+# list files in /run, /etc, /usr/local/lib, and /usr/lib (in that order)
+find -L "/run/${dir}" "/etc/${dir}" "/usr/local/lib/${dir}" "/usr/lib/${dir}" \
+	-maxdepth 1 -name '*.conf' -printf '%p %P\n' 2>/dev/null |
+	# allow for file masking by only outputting each basename once
+	sort -k2 -s | uniq -f1 | cut -d' ' -f1

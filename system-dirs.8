@@ -1,0 +1,33 @@
+.Dd November 21, 2018
+.Dt SYSTEM-DIRS 8
+.Os Linux
+.Sh NAME
+.Nm system-dirs
+.Nd Output configuration files located in several directories
+.Sh SYNOPSIS
+.Nm system-dirs
+.Op DIRNAME
+.Sh DESCRIPTION
+.Nm
+searches directories for configuration files (".conf" suffix) and prints them
+to standard output, masking any files that have repeated basenames.
+.Bl -tag -width indent
+.It DIRNAME
+Name of directory to search in, relative to the system directories used.
+.El
+.Sh FILES
+Configuration files are read from the following locations:
+.Bl -tag -width indent
+.It /run/DIRNAME/*.conf
+.It /etc/DIRNAME/*.conf
+.IT /usr/local/lib/DIRNAME/*.conf
+.It /usr/lib/DIRNAME/*.conf
+.El
+.Pp
+The configuration files must have the ".conf" suffix.
+.Sh AUTHOR
+.An Cameron Nemo ,
+.Mt camerontnorman@gmail.com .
+.Sh LICENSE
+.Nm
+is in the public domain.
