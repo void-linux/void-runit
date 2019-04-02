@@ -5,7 +5,7 @@ export PATH=/bin:/sbin
 
 {
 # Parameters passed as modules-load= or rd.modules-load= in kernel command line.
-sed -nr 's/,/\n/;s/(.* |^)(rd\.)?modules-load=([^ ]*).*/\3/p' /proc/cmdline
+sed -nr 's/,/\n/g;s/(.* |^)(rd\.)?modules-load=([^ ]*).*/\3/p' /proc/cmdline
 
 # Find files /{etc,run,usr/lib}/modules-load.d/*.conf in that order.
 find -L /etc/modules-load.d /run/modules-load.d /usr/lib/modules-load.d \
