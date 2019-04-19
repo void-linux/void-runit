@@ -2,7 +2,7 @@
 
 [ -n "$VIRTUALIZATION" ] && return 0
 
-TTYS=${TTYS:-12}
+TTYS=6
 if [ -n "$FONT" ]; then
     msg "Setting up TTYs font to '${FONT}'..."
 
