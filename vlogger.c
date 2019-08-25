@@ -94,7 +94,7 @@ main(int argc, char *argv[])
 				*p = '\0';
 			if ((p = strrchr(pwd, '/')) && strncmp(p+1, "log", 3) == 0 &&
 			    (*p = '\0', (p = strrchr(pwd, '/'))) && (*(p+1) != '\0')) {
-				tag = strdup(p+1);
+				tag = p+1;
 			}
 		}
 	}
