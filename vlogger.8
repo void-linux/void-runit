@@ -66,7 +66,7 @@ See
 or
 .Xr syslog 3 .
 The default is
-.Pa daemon.info .
+.Dq user.notice .
 .It Fl S
 Force
 .Nm
@@ -87,6 +87,9 @@ Defines the
 .Pa ident
 which is used as prefix for each log message or passed as first argument to
 .Pa /etc/vlogger .
+The default is the
+.Ev LOGNAME
+environment variable.
 .It Ar message
 Write the
 .Ar message

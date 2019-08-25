@@ -78,12 +78,12 @@ main(int argc, char *argv[])
 {
 	char buf[1024];
 	char *p, *argv0;
-	char *tag = "vlogger";
+	char *tag = NULL;
 	int c;
 	int Sflag = 0;
 	int logflags = 0;
-	int facility = LOG_DAEMON;
-	int level = LOG_INFO;
+	int facility = LOG_USER;
+	int level = LOG_NOTICE;
 
 	argv0 = *argv;
 
@@ -135,7 +135,7 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 
-	openlog(tag, logflags, facility);
+	openlog(tag ? tag : getlogin(), logflags, facility);
 
 	if (argc > 0) {
 		size_t len;
