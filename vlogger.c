@@ -119,6 +119,9 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
+	if (argc > 0)
+		Sflag++;
+
 	if (!Sflag && access("/etc/vlogger", X_OK) != -1) {
 		CODE *cp;
 		const char *sfacility = "", *slevel = "";
