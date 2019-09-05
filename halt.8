@@ -1,4 +1,4 @@
-.Dd July 29, 2014
+.Dd September 5, 2019
 .Dt HALT 8
 .Os Linux
 .Sh NAME
@@ -10,6 +10,9 @@
 .Nm halt
 .Op Fl n
 .Op Fl f
+.Op Fl d
+.Op Fl w
+.Op Fl B
 .Nm reboot
 .Op Fl n
 .Op Fl f
@@ -40,6 +43,12 @@ Force halt or reboot, don't call
 .Xr init 8 .
 This is
 .Sy dangerous !
+.It Fl d
+Do not write the wtmp record.
+.It Fl w
+Just write the wtmp record.
+.It Fl B
+Just write the wtmp record, but for a boot.
 .El
 .Sh UNSUPPORTED OPTIONS
 This version of
@@ -50,10 +59,6 @@ the following features are
 .Sy not
 supported and silently ignored:
 .Bl -tag -width indent
-.It Fl w
-to just write the wtmp record.
-.It Fl d
-to not write the wtmp record.
 .It Fl h
 to put hard drives in standby mode.
 .It Fl i
