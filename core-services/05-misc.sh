@@ -1,5 +1,7 @@
 # vim: set ts=4 sw=4 et:
 
+halt -B  # for wtmp
+
 if [ -z "$VIRTUALIZATION" ]; then
     msg "Initializing random seed..."
     cp /var/lib/random-seed /dev/urandom >/dev/null 2>&1 || true
