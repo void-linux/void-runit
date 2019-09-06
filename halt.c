@@ -18,6 +18,10 @@ typedef enum {NOOP, HALT, REBOOT, POWEROFF} action_type;
 #define OUR_WTMP "/var/log/wtmp"
 #endif
 
+#ifndef OUR_UTMP
+#define OUR_UTMP "/run/utmp"
+#endif
+
 void write_wtmp(int boot) {
   int fd;
 
@@ -42,6 +46,13 @@ void write_wtmp(int boot) {
 
   write(fd, (char *)&utmp, sizeof(utmp));
   close(fd);
+
+  if (boot) {
+    if ((fd = open(OUR_UTMP, O_WRONLY|O_APPEND)) < 0)
+      return;
+    write(fd, (char *)&utmp, sizeof utmp);
+    close(fd);
+  }
 }
 
 int main(int argc, char *argv[]) {
