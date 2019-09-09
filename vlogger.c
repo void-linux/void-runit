@@ -95,6 +95,8 @@ main(int argc, char *argv[])
 			if ((p = strrchr(pwd, '/')) && strncmp(p+1, "log", 3) == 0 &&
 			    (*p = '\0', (p = strrchr(pwd, '/'))) && (*(p+1) != '\0')) {
 				tag = p+1;
+				facility = LOG_DAEMON;
+				level = LOG_NOTICE;
 			}
 		}
 	}
