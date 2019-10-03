@@ -13,6 +13,10 @@ done
 
 [ -x /etc/rc.local ] && /etc/rc.local
 
+for script in /etc/rc.local.d/??-*.sh; do
+    [ -x $script ] && $script
+done
+
 runsvchdir "${runlevel}"
 mkdir -p /run/runit/runsvdir
 ln -s /etc/runit/runsvdir/current /run/runit/runsvdir/current
