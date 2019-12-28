@@ -6,7 +6,6 @@ halt -B  # for wtmp
 if [ -z "$VIRTUALIZATION" ]; then
     msg "Initializing random seed..."
     cp /var/lib/random-seed /dev/urandom >/dev/null 2>&1 || true
-    ( umask 077; bytes=$(cat /proc/sys/kernel/random/poolsize) || bytes=512; dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=$bytes >/dev/null 2>&1 )
 fi
 
 msg "Setting up loopback interface..."
