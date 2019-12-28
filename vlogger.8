@@ -12,17 +12,35 @@
 .Op Fl t Ar tag
 .Op Ar message ...
 .Sh DESCRIPTION
-By default,
+The
 .Nm
-reads lines from
+utility writes messages to the system log.
+.Pp
+With
+.Ar message
+arguments
+.Nm
+will always write messages to the system log.
+Without
+.Ar message
+arguments
+.Nm
+reads messages from
 .Dv stdin
-and sends them to syslog.
-If the file
+or the file specified with the
+.Fl f
+flag.
+If the
 .Pa /etc/vlogger
-exists and is executable it is executed with
-.Ar tag
-as only argument and replaces
-.Nm .
+executable exists
+.Nm
+executes it with
+.Ar tag ,
+level
+and priority as arguments,
+replacing the
+.Nm
+process.
 .Pp
 If
 .Nm
@@ -34,10 +52,10 @@ supervision suite it uses the service name as default
 As example if
 .Nm
 is linked to
-.Dv /var/service/foo/log/run
+.Pa /var/service/foo/log/run
 it uses
-.Dv foo
-as default
+.Dq foo
+as
 .Ar tag .
 .Pp
 The options are as follows:
@@ -45,7 +63,9 @@ The options are as follows:
 .It Fl f Ar file
 Read lines from the specified
 .Ar file .
-This
+This option cannot be combine
+.Ar message
+arguments.
 .It Fl i
 Log the PID of the
 .Nm
@@ -66,7 +86,7 @@ See
 or
 .Xr syslog 3 .
 The default is
-.Pa daemon.info .
+.Dq user.notice .
 .It Fl S
 Force
 .Nm
@@ -87,6 +107,9 @@ Defines the
 .Pa ident
 which is used as prefix for each log message or passed as first argument to
 .Pa /etc/vlogger .
+The default is the
+.Ev LOGNAME
+environment variable.
 .It Ar message
 Write the
 .Ar message

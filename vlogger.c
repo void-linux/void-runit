@@ -78,12 +78,12 @@ main(int argc, char *argv[])
 {
 	char buf[1024];
 	char *p, *argv0;
-	char *tag = "vlogger";
+	char *tag = NULL;
 	int c;
 	int Sflag = 0;
 	int logflags = 0;
-	int facility = LOG_DAEMON;
-	int level = LOG_INFO;
+	int facility = LOG_USER;
+	int level = LOG_NOTICE;
 
 	argv0 = *argv;
 
@@ -94,7 +94,7 @@ main(int argc, char *argv[])
 				*p = '\0';
 			if ((p = strrchr(pwd, '/')) && strncmp(p+1, "log", 3) == 0 &&
 			    (*p = '\0', (p = strrchr(pwd, '/'))) && (*(p+1) != '\0')) {
-				tag = strdup(p+1);
+				tag = p+1;
 			}
 		}
 	}
@@ -119,9 +119,12 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
+	if (argc > 0)
+		Sflag++;
+
 	if (!Sflag && access("/etc/vlogger", X_OK) != -1) {
 		CODE *cp;
-		const char *sfacility, *slevel;
+		const char *sfacility = "", *slevel = "";
 		for (cp = prioritynames; cp->c_name; cp++) {
 			if (cp->c_val == level)
 				slevel = cp->c_name;
@@ -135,7 +138,7 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 
-	openlog(tag, logflags, facility);
+	openlog(tag ? tag : getlogin(), logflags, facility);
 
 	if (argc > 0) {
 		size_t len;
