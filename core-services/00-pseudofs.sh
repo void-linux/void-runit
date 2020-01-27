@@ -11,6 +11,10 @@ mountpoint -q /dev/shm || mount -o mode=1777,nosuid,nodev -n -t tmpfs shm /dev/s
 mountpoint -q /sys/kernel/security || mount -n -t securityfs securityfs /sys/kernel/security
 
 if [ -z "$VIRTUALIZATION" ]; then
+    # cgroup v1
     mountpoint -q /sys/fs/cgroup || mount -o mode=0755 -t tmpfs cgroup /sys/fs/cgroup
     awk '$4 == 1 { system("mountpoint -q /sys/fs/cgroup/" $1 " || { mkdir -p /sys/fs/cgroup/" $1 " && mount -t cgroup -o " $1 " cgroup /sys/fs/cgroup/" $1 " ;}" ) }' /proc/cgroups
+    # cgroup v2
+    mkdir -p /sys/fs/cgroup/unified
+    mountpoint -q /sys/fs/cgroup/unified || mount -t cgroup2 -o nsdelegate cgroup2 /sys/fs/cgroup/unified
 fi
