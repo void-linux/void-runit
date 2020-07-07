@@ -10,7 +10,7 @@ mountpoint -q /dev/pts || mount -o mode=0620,gid=5,nosuid,noexec -n -t devpts de
 mountpoint -q /dev/shm || mount -o mode=1777,nosuid,nodev -n -t tmpfs shm /dev/shm
 mountpoint -q /sys/kernel/security || mount -n -t securityfs securityfs /sys/kernel/security
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     mountpoint -q /sys/fs/cgroup || mount -o mode=0755 -t tmpfs cgroup /sys/fs/cgroup
     awk '$4 == 1 { system("mountpoint -q /sys/fs/cgroup/" $1 " || { mkdir -p /sys/fs/cgroup/" $1 " && mount -t cgroup -o " $1 " cgroup /sys/fs/cgroup/" $1 " ;}" ) }' /proc/cgroups
 fi

@@ -4,7 +4,7 @@
 PATH=/usr/bin:/usr/sbin
 
 . /etc/runit/functions
-detect_virt
+detect_containerization
 [ -r /etc/rc.conf ] && . /etc/rc.conf
 
 if [ -e /run/runit/reboot ]; then
@@ -18,18 +18,18 @@ sv exit /var/service/*
 
 [ -x /etc/rc.shutdown ] && /etc/rc.shutdown
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     msg "Saving random seed..."
     ( umask 077; bytes=$(cat /proc/sys/kernel/random/poolsize) || bytes=512; dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=$bytes >/dev/null 2>&1 )
 fi
 
-if [ -z "$VIRTUALIZATION" -a -n "$HARDWARECLOCK" ]; then
+if [ -z "$IS_CONTAINER" ] && [ -n "$HARDWARECLOCK" ]; then
     hwclock --systohc ${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z)}
 fi
 
 halt -w  # for wtmp
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     msg "Stopping udev..."
     udevadm control --exit
 fi
@@ -40,7 +40,7 @@ sleep 1
 msg "Sending KILL signal to processes..."
 pkill --inverse -s0,1 -KILL
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     msg "Unmounting filesystems, disabling swap..."
     swapoff -a
     umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
@@ -50,7 +50,7 @@ fi
 
 sync
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     deactivate_vgs
     deactivate_crypt
     if [ -e /run/runit/reboot ] && command -v kexec >/dev/null; then

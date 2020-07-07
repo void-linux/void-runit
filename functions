@@ -1,4 +1,5 @@
 # *-*-shell-*-*
+# vim: set ts=4 sw=4 et:
 
 msg() {
     # bold
@@ -27,12 +28,20 @@ emergency_shell() {
     /bin/sh -l
 }
 
-detect_virt() {
-   # Detect LXC containers
-   [ ! -e /proc/self/environ ] && return
-   if grep -q lxc /proc/self/environ >/dev/null; then
-       export VIRTUALIZATION=1
-   fi
+detect_containerization() {
+    # LXC
+    if [ -e /proc/self/environ ] && grep -q lxc /proc/self/environ >/dev/null; then
+        export IS_CONTAINER=1
+        export IS_LXC_CONTAINER=1
+        return 
+    fi
+
+    # Docker
+    if [ -f /.dockerenv ]; then
+        export IS_CONTAINER=1
+        export IS_DOCKER_CONTAINER=1
+        return 
+    fi
 }
 
 deactivate_vgs() {

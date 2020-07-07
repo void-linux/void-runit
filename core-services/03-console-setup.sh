@@ -1,6 +1,6 @@
 # vim: set ts=4 sw=4 et:
 
-[ -n "$VIRTUALIZATION" ] && return 0
+[ -n "$IS_CONTAINER" ] && return 0
 
 TTYS=${TTYS:-12}
 if [ -n "$FONT" ]; then

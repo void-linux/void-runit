@@ -10,7 +10,7 @@ msg "Welcome to Void!"
 [ -r /etc/rc.conf ] && . /etc/rc.conf
 
 # Start core services: one-time system tasks.
-detect_virt
+detect_containerization
 for f in /etc/runit/core-services/*.sh; do
     [ -r $f ] && . $f
 done
