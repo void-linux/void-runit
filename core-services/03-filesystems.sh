@@ -30,9 +30,14 @@ if [ -e /etc/crypttab ]; then
     fi
 fi
 
-if [ -e /etc/zfs/zpool.cache -a -x /usr/bin/zfs ]; then
-    msg "Activating ZFS devices..."
-    zpool import -c /etc/zfs/zpool.cache -N -a
+if [ -x /usr/bin/zpool -a -x /usr/bin/zfs ]; then
+    if [ -e /etc/zfs/zpool.cache ]; then
+        msg "Importing cached ZFS pools..."
+        zpool import -N -a -c /etc/zfs/zpool.cache
+    else
+        msg "Scanning for and importing ZFS pools..."
+        zpool import -N -a -o cachefile=none
+    fi
 
     msg "Mounting ZFS file systems..."
     zfs mount -a
