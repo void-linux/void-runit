@@ -3,8 +3,11 @@
 PATH=/usr/bin:/usr/sbin
 MSG="System is going down..."
 
+# We check for this file after receiving a SIGCONT to move to stage3
+chmod 100 /run/runit/stopit
+
 # We check for this file in stage3 to halt or reboot
-touch /run/runit/reboot
+chmod 100 /run/runit/reboot
 
 # Proceed with shutdown process
 echo "$MSG" | wall
