@@ -7,10 +7,6 @@ PATH=/usr/bin:/usr/sbin
 detect_virt
 [ -r /etc/rc.conf ] && . /etc/rc.conf
 
-if [ -e /run/runit/reboot ]; then
-    chmod 100 /run/runit/reboot
-fi
-
 echo
 msg "Waiting for services to stop..."
 sv force-stop /var/service/*
