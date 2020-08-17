@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <sys/reboot.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -10,8 +11,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <utmp.h>
-
-extern char *__progname;
 
 typedef enum {NOOP, HALT, REBOOT, POWEROFF} action_type;
 
@@ -63,11 +62,11 @@ int main(int argc, char *argv[]) {
   int opt;
   action_type action = NOOP;
 
-  if (strcmp(__progname, "halt") == 0)
+  if (strcmp(program_invocation_short_name, "halt") == 0)
     action = HALT;
-  else if (strcmp(__progname, "reboot") == 0)
+  else if (strcmp(program_invocation_short_name, "reboot") == 0)
     action = REBOOT;
-  else if (strcmp(__progname, "poweroff") == 0)
+  else if (strcmp(program_invocation_short_name, "poweroff") == 0)
     action = POWEROFF;
   else
     warnx("no default behavior, needs to be called as halt/reboot/poweroff.");
@@ -95,7 +94,7 @@ int main(int argc, char *argv[]) {
       write_wtmp(1);
       return 0;
     default:
-      errx(1, "Usage: %s [-n] [-f] [-d] [-w] [-B]", __progname);
+      errx(1, "Usage: %s [-n] [-f] [-d] [-w] [-B]", program_invocation_short_name);
     }
 
   if (do_wtmp)
