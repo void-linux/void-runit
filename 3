@@ -8,6 +8,7 @@ detect_virt
 [ -r /etc/rc.conf ] && . /etc/rc.conf
 
 echo
+[ -x /etc/rc.pre-shutdown ] && msg "Starting pre-shutdown hook" && /etc/rc.pre-shutdown
 msg "Waiting for services to stop..."
 sv force-stop /var/service/*
 sv exit /var/service/*
