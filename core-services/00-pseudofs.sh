@@ -11,10 +11,36 @@ mountpoint -q /dev/shm || mount -o mode=1777,nosuid,nodev -n -t tmpfs shm /dev/s
 mountpoint -q /sys/kernel/security || mount -n -t securityfs securityfs /sys/kernel/security
 
 if [ -z "$VIRTUALIZATION" ]; then
+    _cgroupv1=""
+    _cgroupv2=""
+
+    case "${CGROUP_MODE:-hybrid}" in
+        legacy)
+            _cgroupv1="/sys/fs/cgroup"
+            ;;
+        hybrid)
+            _cgroupv1="/sys/fs/cgroup"
+            _cgroupv2="${_cgroupv1}/unified"
+            ;;
+        unified)
+            _cgroupv2="/sys/fs/cgroup"
+            ;;
+    esac
+
     # cgroup v1
-    mountpoint -q /sys/fs/cgroup || mount -o mode=0755 -t tmpfs cgroup /sys/fs/cgroup
-    awk '$4 == 1 { system("mountpoint -q /sys/fs/cgroup/" $1 " || { mkdir -p /sys/fs/cgroup/" $1 " && mount -t cgroup -o " $1 " cgroup /sys/fs/cgroup/" $1 " ;}" ) }' /proc/cgroups
+    if [ -n "$_cgroupv1" ]; then
+        mountpoint -q "$_cgroupv1" || mount -o mode=0755 -t tmpfs cgroup "$_cgroupv1"
+        while read -r _subsys_name _hierarchy _num_cgroups _enabled; do
+            [ "$_enabled" = "1" ] || continue
+            _controller="${_cgroupv1}/${_subsys_name}"
+            mkdir -p "$_controller"
+            mountpoint -q "$_controller" || mount -t cgroup -o "$_subsys_name" cgroup "$_controller"
+        done < /proc/cgroups
+    fi
+
     # cgroup v2
-    mkdir -p /sys/fs/cgroup/unified
-    mountpoint -q /sys/fs/cgroup/unified || mount -t cgroup2 -o nsdelegate cgroup2 /sys/fs/cgroup/unified
+    if [ -n "$_cgroupv2" ]; then
+        mkdir -p "$_cgroupv2"
+        mountpoint -q "$_cgroupv2" || mount -t cgroup2 -o nsdelegate cgroup2 "$_cgroupv2"
+    fi
 fi
