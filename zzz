@@ -3,7 +3,7 @@
 
 USAGE="Usage: ${0##*/} [-nSzZR]
    -n   dry run (sleep for 5s instead of suspend/hibernate)
-   -S   Low-power idle (ACPI S0)
+   -S   Low-power idle (ACPI S1)
    -z   suspend to RAM (ACPI S3) [DEFAULT for zzz(8)]
    -Z   hibernate to disk & power off (ACPI S4) [DEFAULT for ZZZ(8)]
    -R   hibernate to disk & reboot
