@@ -40,7 +40,7 @@ if [ -x /usr/bin/zpool -a -x /usr/bin/zfs ]; then
     fi
 
     msg "Mounting ZFS file systems..."
-    zfs mount -a
+    zfs mount -a -l
 
     msg "Sharing ZFS file systems..."
     zfs share -a
