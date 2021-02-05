@@ -12,5 +12,5 @@ elif [ -x /sbin/agetty -o -x /bin/agetty ]; then
 	GETTY=agetty
 fi
 
-exec setsid ${GETTY} ${GETTY_ARGS} \
+exec chpst -P ${GETTY} ${GETTY_ARGS} \
 	"${tty}" "${BAUD_RATE}" "${TERM_NAME}"
