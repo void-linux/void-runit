@@ -17,7 +17,7 @@ fi
 
 if [ -x /sbin/vgchange -o -x /bin/vgchange ]; then
     msg "Activating LVM devices..."
-    vgchange --sysinit -a y || emergency_shell
+    vgchange --sysinit -a ay || emergency_shell
 fi
 
 if [ -e /etc/crypttab ]; then
@@ -26,7 +26,7 @@ if [ -e /etc/crypttab ]; then
 
     if [ -x /sbin/vgchange -o -x /bin/vgchange ]; then
         msg "Activating LVM devices for dm-crypt..."
-        vgchange --sysinit -a y || emergency_shell
+        vgchange --sysinit -a ay || emergency_shell
     fi
 fi
 
