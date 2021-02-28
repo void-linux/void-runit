@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <limits.h>
 
+extern char *__progname;
+
 static char pwd[PATH_MAX];
 
 typedef struct {
@@ -99,6 +101,9 @@ main(int argc, char *argv[])
 				level = LOG_NOTICE;
 			}
 		}
+	} else if (strcmp(__progname, "logger") == 0) {
+		/* behave just like logger(1) and only use syslog */
+		Sflag++;
 	}
 
 	while ((c = getopt(argc, argv, "f:ip:Sst:")) != -1)
