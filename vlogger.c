@@ -135,7 +135,7 @@ main(int argc, char *argv[])
 			if (cp->c_val == facility)
 				sfacility = cp->c_name;
 		}
-		execl("/etc/vlogger", argv0, tag, slevel, sfacility, (char *)0);
+		execl("/etc/vlogger", argv0, tag ? tag : "", slevel, sfacility, (char *)0);
 		fprintf(stderr, "vlogger: exec: %s\n", strerror(errno));
 		exit(1);
 	}
