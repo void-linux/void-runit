@@ -14,13 +14,15 @@
 .Sh DESCRIPTION
 The
 .Nm
-utility writes messages to the system log.
+utility writes messages to the system log or an arbitrary executable.
 .Pp
-With
-.Ar message
-arguments
+If
 .Nm
-will always write messages to the system log.
+is executed as
+.Nm logger
+it will always use the system log and behave like the regular
+.Xr logger 1 .
+.Pp
 Without
 .Ar message
 arguments
@@ -36,8 +38,10 @@ executable exists
 .Nm
 executes it with
 .Ar tag ,
-level
-and priority as arguments,
+.Ar level
+and
+.Ar facility
+as arguments,
 replacing the
 .Nm
 process.
@@ -117,7 +121,7 @@ environment variable.
 .It Ar message
 Write the
 .Ar message
-to the log.
+to the system log.
 .El
 .Sh FACILITIES
 .Bl -tag -width 11n -compact
