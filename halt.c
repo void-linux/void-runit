@@ -63,11 +63,11 @@ int main(int argc, char *argv[]) {
   int opt;
   action_type action = NOOP;
 
-  if (strcmp(__progname, "halt") == 0)
+  if (strncmp(__progname, "halt", 4) == 0)
     action = HALT;
-  else if (strcmp(__progname, "reboot") == 0)
+  else if (strncmp(__progname, "reboot", 6) == 0)
     action = REBOOT;
-  else if (strcmp(__progname, "poweroff") == 0)
+  else if (strncmp(__progname, "poweroff", 8) == 0)
     action = POWEROFF;
   else
     warnx("no default behavior, needs to be called as halt/reboot/poweroff.");
