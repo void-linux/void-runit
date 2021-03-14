@@ -43,6 +43,8 @@ install:
 	ln -sf /run/runit/stopit ${DESTDIR}/etc/runit/
 	cp -R --no-dereference --preserve=mode,links -v runsvdir/* ${DESTDIR}/etc/runit/runsvdir/
 	cp -R --no-dereference --preserve=mode,links -v services/* ${DESTDIR}/etc/sv/
+	install -d ${DESTDIR}/${PREFIX}/share/polkit-1/actions
+	install -m644 polkit-actions/org.voidlinux.zzz.policy ${DESTDIR}/${PREFIX}/share/polkit-1/actions
 
 clean:
 	-rm -f halt pause vlogger
