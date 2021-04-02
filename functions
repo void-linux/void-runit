@@ -29,10 +29,7 @@ emergency_shell() {
 
 detect_virt() {
    # Detect LXC containers
-   [ ! -e /proc/self/environ ] && return
-   if grep -q lxc /proc/self/environ >/dev/null; then
-       export VIRTUALIZATION=1
-   fi
+   test -z "$container" || export VIRTUALIZATION=1
 }
 
 deactivate_vgs() {
