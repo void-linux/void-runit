@@ -10,6 +10,11 @@ if [ -x /sbin/dmraid -o -x /bin/dmraid ]; then
     dmraid -i -ay
 fi
 
+if [ -x /bin/mdadm ]; then
+    msg "Activating software RAID arrays..."
+    mdadm -As
+fi
+
 if [ -x /bin/btrfs ]; then
     msg "Activating btrfs devices..."
     btrfs device scan || emergency_shell
