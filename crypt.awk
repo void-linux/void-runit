@@ -56,6 +56,10 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
             else if ( par == "keyfile-size" ) luksopts=luksopts "-l " val " ";
             else if ( par == "keyfile-offset" ) luksopts=luksopts "--keyfile-offset=" val " ";
             else if ( par == "header" ) luksopts=luksopts "--header=" val " ";
+            else if ( par == "perf-same_cpu_crypt" ) commonopts=commonopts "--perf-same_cpu_crypt ";
+            else if ( par == "perf-submit_from_crypt_cpus" ) commonopts=commonopts "--perf-submit_from_crypt_cpus ";
+            else if ( par == "perf-no_read_workqueue" ) commonopts=commonopts "--perf-no_read_workqueue ";
+            else if ( par == "perf-no_write_workqueue" ) commonopts=commonopts "--perf-no_write_workqueue ";
             else {
                 print "option: " par " not supported " >"/dev/stderr";
                 makeswap="";
