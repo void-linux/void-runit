@@ -52,7 +52,7 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
             else if ( par == "keyscript" ) {use_keyscript="y"; keyscript=val;}
             else if ( par == "keyslot" || par == "key-slot" ) luksopts=luksopts "-S " val " ";
             else if ( par == "keyfile-size" ) luksopts=luksopts "-l " val " ";
-            else if ( par == "keyfile-offset" ) luksopts=luksopts "-keyfile-offset=" val " ";
+            else if ( par == "keyfile-offset" ) luksopts=luksopts "--keyfile-offset=" val " ";
             else if ( par == "header" ) luksopts=luksopts "--header=" val " ";
             else {
                 print "option: " par " not supported " >"/dev/stderr";
