@@ -10,6 +10,10 @@ mountpoint -q /dev/pts || mount -o mode=0620,gid=5,nosuid,noexec -n -t devpts de
 mountpoint -q /dev/shm || mount -o mode=1777,nosuid,nodev -n -t tmpfs shm /dev/shm
 mountpoint -q /sys/kernel/security || mount -n -t securityfs securityfs /sys/kernel/security
 
+if [ -d /sys/firmware/efi/efivars ]; then
+    mountpoint -q /sys/firmware/efi/efivars || mount -o nosuid,noexec,nodev -t efivarfs efivarfs /sys/firmware/efi/efivars
+fi
+
 if [ -z "$VIRTUALIZATION" ]; then
     _cgroupv1=""
     _cgroupv2=""
