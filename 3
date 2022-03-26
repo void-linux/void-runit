@@ -15,6 +15,7 @@ sv exit /var/service/*
 [ -x /etc/rc.shutdown ] && /etc/rc.shutdown
 
 if [ -z "$VIRTUALIZATION" ]; then
+    msg "Saving random number generator seed..."
     seedrng
 fi
 
