@@ -2,3 +2,7 @@
 #
 # This is run by runit in stage 3 after the services are stopped
 # (see /etc/runit/3).
+
+for hook in /etc/shutdown.d/* ; do
+  [ -x "$hook" ] && "$hook"
+done
