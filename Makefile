@@ -38,6 +38,7 @@ install:
 	install -m644 crypt.awk  ${DESTDIR}/etc/runit
 	install -m644 rc.conf ${DESTDIR}/etc
 	install -m755 rc.local ${DESTDIR}/etc
+	install -m755 rc.pre-shutdown ${DESTDIR}/etc
 	install -m755 rc.shutdown ${DESTDIR}/etc
 	install -d ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
 	install -m644 dracut/*.conf ${DESTDIR}/${PREFIX}/lib/dracut/dracut.conf.d
