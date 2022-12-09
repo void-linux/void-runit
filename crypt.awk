@@ -35,6 +35,8 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
             val=para[2];
             if ( par == "readonly" || par == "read-only") commonopts=commonopts "-r ";
             else if ( par == "discard" ) commonopts=commonopts "--allow-discards ";
+            else if ( par == "no-read-workqueue" ) commonopts=commonopts "--perf-no_read_workqueue ";
+            else if ( par == "no-write-workqueue" ) commonopts=commonopts "--perf-no_write_workqueue ";
             else if ( par == "tries" ) commonopts=commonopts "-T " val " ";
             else if ( par == "swap" ) makeswap="y";
             else if ( par == "cipher" ) swapopts=swapopts "-c " val " ";
