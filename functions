@@ -30,6 +30,7 @@ emergency_shell() {
 detect_virt() {
    # Detect LXC (and other) containers
    [ -z "${container+x}" ] || export VIRTUALIZATION=1
+   [ -r /proc/1/environ ] && grep -qa "container=lx" /proc/1/environ && export VIRTUALIZATION=1
 }
 
 deactivate_vgs() {
