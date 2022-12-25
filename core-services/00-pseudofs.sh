@@ -18,7 +18,7 @@ if [ -z "$IS_CONTAINER" ]; then
     _cgroupv1=""
     _cgroupv2=""
 
-    case "${CGROUP_MODE:-hybrid}" in
+    case "${CGROUP_MODE:-unified}" in
         legacy)
             _cgroupv1="/sys/fs/cgroup"
             ;;
@@ -40,11 +40,27 @@ if [ -z "$IS_CONTAINER" ]; then
             mkdir -p "$_controller"
             mountpoint -q "$_controller" || mount -t cgroup -o "$_subsys_name" cgroup "$_controller"
         done < /proc/cgroups
+        # always mount the systemd tracking cgroup,
+        # to support containerized systemd instances
+        mkdir -p /sys/fs/cgroup/systemd
+        mountpoint -q /sys/fs/cgroup/systemd || \
+            mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
     fi
 
     # cgroup v2
     if [ -n "$_cgroupv2" ]; then
         mkdir -p "$_cgroupv2"
-        mountpoint -q "$_cgroupv2" || mount -t cgroup2 -o nsdelegate cgroup2 "$_cgroupv2"
+        mountpoint -q "$_cgroupv2" || \
+            mount -t cgroup2 -o nsdelegate cgroup2 "$_cgroupv2"
+    fi
+else
+    # in containers, unless otherwise configured,
+    # attempt to mount cgroup2 at the standard path,
+    # but never fail
+    if [ "${CGROUP_MODE:-unified}" = "unified" ]; then
+        _cgroup2="/sys/fs/cgroup"
+        mkdir -p "$_cgroup2"
+        mountpoint -q "$_cgroup2" || \
+            mount -t cgroup2 -o nsdelegate cgroup2 "$_cgroup2" || true
     fi
 fi
