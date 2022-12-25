@@ -28,27 +28,27 @@ emergency_shell() {
 }
 
 detect_virt() {
-   # Detect LXC (and other) containers
-   [ -z "${container+x}" ] || export VIRTUALIZATION=1
+    # Detect LXC (and other) containers
+    [ -z "${container+x}" ] || export VIRTUALIZATION=1
 }
 
 deactivate_vgs() {
-   _group=${1:-All}
-   if [ -x /sbin/vgchange -o -x /bin/vgchange ]; then
-       vgs=$(vgs|wc -l)
-       if [ $vgs -gt 0 ]; then
-           msg "Deactivating $_group LVM Volume Groups..."
-           vgchange -an
-       fi
-   fi
+    _group=${1:-All}
+    if [ -x /sbin/vgchange -o -x /bin/vgchange ]; then
+        vgs=$(vgs|wc -l)
+        if [ $vgs -gt 0 ]; then
+            msg "Deactivating $_group LVM Volume Groups..."
+            vgchange -an
+        fi
+    fi
 }
 
 deactivate_crypt() {
-   if [ -x /sbin/dmsetup -o -x /bin/dmsetup ]; then
-       msg "Deactivating Crypt Volumes"
-       for v in $(dmsetup ls --target crypt --exec "dmsetup info -c --noheadings -o open,name"); do
-           [ ${v%%:*} = "0" ] && cryptsetup close ${v##*:}
-       done
-       deactivate_vgs "Crypt"
-   fi
+    if [ -x /sbin/dmsetup -o -x /bin/dmsetup ]; then
+        msg "Deactivating Crypt Volumes"
+        for v in $(dmsetup ls --target crypt --exec "dmsetup info -c --noheadings -o open,name"); do
+            [ ${v%%:*} = "0" ] && cryptsetup close ${v##*:}
+        done
+        deactivate_vgs "Crypt"
+    fi
 }
