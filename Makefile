@@ -33,6 +33,7 @@ install:
 	install -d ${DESTDIR}/etc/runit/runsvdir
 	install -d ${DESTDIR}/etc/runit/core-services
 	install -m644 core-services/*.sh ${DESTDIR}/etc/runit/core-services
+	install -m644 shutdown.d/*.sh ${DESTDIR}/etc/runit/shutdown.d
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
 	install -m644 functions $(DESTDIR)/etc/runit
 	install -m644 crypt.awk  ${DESTDIR}/etc/runit
