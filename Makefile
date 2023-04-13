@@ -32,6 +32,7 @@ install:
 	install -d ${DESTDIR}/etc/sv
 	install -d ${DESTDIR}/etc/runit/runsvdir
 	install -d ${DESTDIR}/etc/runit/core-services
+	install -d ${DESTDIR}/etc/runit/shutdown.d
 	install -m644 core-services/*.sh ${DESTDIR}/etc/runit/core-services
 	install -m644 shutdown.d/*.sh ${DESTDIR}/etc/runit/shutdown.d
 	install -m755 ${SCRIPTS} ${DESTDIR}/etc/runit
