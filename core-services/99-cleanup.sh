@@ -3,6 +3,9 @@
 if [ ! -e /var/log/wtmp ]; then
 	install -m0664 -o root -g utmp /dev/null /var/log/wtmp
 fi
+if [ ! -e /var/log/lastlog ]; then
+	install -m0664 -o root -g utmp /dev/null /var/log/lastlog
+fi
 if [ ! -e /var/log/btmp ]; then
 	install -m0600 -o root -g utmp /dev/null /var/log/btmp
 fi
