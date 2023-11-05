@@ -54,8 +54,20 @@ The environment variable
 can be used in these hooks to differentiate between
 .Ic standby ,
 .Ic suspend ,
+.Ic resume ,
 and
-.Ic resume .
+.Ic hibernate .
+If the value is
+.Ic hibernate ,
+then
+.Ev
+ZZZ_HIBERNATE_MODE
+can be used to differentiate between
+.Ic platform ,
+.Ic reboot ,
+and
+.Ic suspend
+hibernation modes.
 .Sh DIAGNOSTICS
 .Bl -tag -width indent
 .It suspend/hibernate not supported
