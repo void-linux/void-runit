@@ -22,9 +22,4 @@ else
 	chmod 0644 /var/log/dmesg.log
 fi
 
-# create files for controlling runit
-mkdir -p /run/runit
-install -m000 /dev/null /run/runit/stopit
-install -m000 /dev/null /run/runit/reboot
-
 msg "Initialization complete, running stage 2..."
