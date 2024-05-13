@@ -68,8 +68,7 @@ done
 if [ -z "$FASTBOOT" ]; then
     msg "Checking filesystems:"
     fsck -A -T -a -t noopts=_netdev $FORCEFSCK
-    ret="$?"
-    if [ "$ret" -ne 0 ] && [ "$ret" -ne 8 ]; then
+    if [ $? -gt 1 ]; then
         emergency_shell
     fi
 fi
