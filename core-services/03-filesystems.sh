@@ -3,7 +3,7 @@
 [ -n "$VIRTUALIZATION" ] && return 0
 
 msg "Remounting rootfs read-only..."
-mount -o remount,ro / || emergency_shell
+LIBMOUNT_FORCE_MOUNT2=always mount -o remount,ro / || emergency_shell
 
 if [ -x /sbin/dmraid -o -x /bin/dmraid ]; then
     msg "Activating dmraid devices..."
@@ -74,7 +74,7 @@ if [ -z "$FASTBOOT" ]; then
 fi
 
 msg "Mounting rootfs read-write..."
-mount -o remount,rw / || emergency_shell
+LIBMOUNT_FORCE_MOUNT2=always mount -o remount,rw / || emergency_shell
 
 msg "Mounting all non-network filesystems..."
 mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev || emergency_shell
