@@ -11,3 +11,14 @@ if [ ! -e /var/log/lastlog ]; then
 fi
 install -dm1777 /tmp/.X11-unix /tmp/.ICE-unix
 rm -f /etc/nologin /forcefsck /forcequotacheck /fastboot
+
+msg "Killing device manager to make way for service..."
+case $CONFIG_DEV in
+	udevd)
+		udevadm control --exit
+	;;
+
+	mdevd)
+		kill "$pid_mdevd"
+	;;
+esac
