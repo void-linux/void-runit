@@ -82,7 +82,7 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
         }
         if ( use_luks == "y" && makeswap != "y" ){
             if ( use_keyscript == "y") {
-                ccmd=keyscript " | cryptsetup " luksopts commonopts "luksOpen -d - " src " " dest;
+                ccmd=keyscript " " key " " src " | cryptsetup " luksopts commonopts "luksOpen -d - " src " " dest;
                 use_keyscript="";
             }
             else {
