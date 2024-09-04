@@ -3,6 +3,8 @@
 
 PATH=/usr/bin:/usr/sbin
 
+. /etc/runit/functions
+
 runlevel=default
 for arg in $(cat /proc/cmdline); do
     if [ -d /etc/runit/runsvdir/"$arg" ]; then
@@ -11,11 +13,14 @@ for arg in $(cat /proc/cmdline); do
     fi
 done
 
+kmsg "start:rclocal"
 [ -x /etc/rc.local ] && /etc/rc.local
+kmsg "finish:rclocal"
 
 runsvchdir "${runlevel}"
 mkdir -p /run/runit/runsvdir
 ln -s /etc/runit/runsvdir/current /run/runit/runsvdir/current
 
+kmsg "start:runsvdir"
 exec env - PATH=$PATH \
     runsvdir -P /run/runit/runsvdir/current 'log: ...........................................................................................................................................................................................................................................................................................................................................................................................................'

@@ -11,8 +11,13 @@ msg "Welcome to Void!"
 
 # Start core services: one-time system tasks.
 detect_virt
-for f in /etc/runit/core-services/*.sh; do
-	[ -r $f ] && . $f
+for cs in /etc/runit/core-services/*.sh; do
+    if [ -r "$cs" ]; then
+        kmsg "start:core:$cs"
+        . "$cs"
+        kmsg "finish:core:$cs"
+    fi
 done
+kmsg "finish:core"
 
 msg "Initialization complete, running stage 2..."

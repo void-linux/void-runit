@@ -1,5 +1,9 @@
 # *-*-shell-*-*
 
+kmsg() {
+    printf "<7>runit: $@\n" >/dev/kmsg
+}
+
 msg() {
     # bold
     printf "\033[1m=> $@\033[m\n"
