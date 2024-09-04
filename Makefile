@@ -16,11 +16,13 @@ install:
 	install -m755 modules-load ${DESTDIR}/${PREFIX}/sbin/modules-load
 	install -m755 seedrng ${DESTDIR}/${PREFIX}/sbin/seedrng
 	install -m755 zzz ${DESTDIR}/${PREFIX}/sbin
+	install -m755 runit-startuptime ${DESTDIR}/${PREFIX}/sbin
 	ln -sf zzz ${DESTDIR}/${PREFIX}/sbin/ZZZ
 	ln -sf halt ${DESTDIR}/${PREFIX}/sbin/poweroff
 	ln -sf halt ${DESTDIR}/${PREFIX}/sbin/reboot
 	install -d ${DESTDIR}/${PREFIX}/share/man/man1
 	install -m644 pause.1 ${DESTDIR}/${PREFIX}/share/man/man1
+	install -m644 runit-startuptime.1 ${DESTDIR}/${PREFIX}/share/man/man1
 	install -d ${DESTDIR}/${PREFIX}/share/man/man8
 	install -m644 zzz.8 ${DESTDIR}/${PREFIX}/share/man/man8
 	install -m644 shutdown.8 ${DESTDIR}/${PREFIX}/share/man/man8

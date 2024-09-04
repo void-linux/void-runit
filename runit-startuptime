@@ -1,0 +1,69 @@
+#!/bin/sh
+# vim: set ts=4 sw=4 et ft=awk:
+
+if [ -n "$1" ]; then
+    printf "Usage: runit-startuptime\n\nPrint a rough accounting of where time is spent during boot\n" >&2
+    exit 1
+fi
+
+dmesg -l debug | LANG=C.UTF-8 awk -F '[][ :]+' '
+BEGIN {
+    PROCINFO["sorted_in"] = "@ind_str_asc"
+    initramfs = 0
+    coresvtotal = 0
+    rclocal = 0
+    total = 0
+}
+
+function svbasename(file) {
+    sub(".*/", "", file)
+    sub(".sh$", "", file)
+    return file
+}
+
+$3 == "/init" {
+    initramfs = $2
+    next
+}
+
+$3 == "runit" {
+    if ($5 == "core") {
+        sv = svbasename($6)
+        if ($4 == "start") {
+            coresv[sv] = $2
+            if (coresvtotal == 0)
+                coresvtotal = $2
+        } else if ($4 == "finish") {
+            if ($6 != "") {
+                if (sv in coresv)
+                    coresv[sv] = $2 - coresv[sv]
+                else
+                    # /dev is not guaranteed until 00-pseudofs
+                    # so the first start message may not exist
+                    coresv[sv] = $2 - initramfs
+            } else
+                if (coresvtotal == 0)
+                    coresvtotal = $2 - initramfs
+                else
+                    coresvtotal = $2 - coresvtotal
+        }
+    } else if ($5 == "rclocal") {
+        if ($4 == "start")
+            rclocal = $2
+        else if ($4 == "finish")
+            rclocal = $2 - rclocal
+    } else if ($5 == "runsvdir")
+        total = $2
+    next
+}
+
+END {
+    if (NR > 2) {
+        printf "initramfs\t%0.3f s\n", initramfs
+        printf "core-services\t%0.3f s\n", coresvtotal
+        for (sv in coresv)
+            printf "  %-20s\t%0.3f s\n", sv, coresv[sv]
+        printf "rc.local\t%0.3f s\n", rclocal
+        printf "total\t\t%0.3f s\n", total
+    }
+}'

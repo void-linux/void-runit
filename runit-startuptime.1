@@ -1,0 +1,42 @@
+.Dd September 4, 2024
+.Dt RUNIT-STARTUPTIME 1
+.Os
+.Sh NAME
+.Nm runit-startuptime
+.Nd Print a rough accounting of where time is spent during boot
+.Sh SYNOPSIS
+.Nm runit-startuptime
+.Sh DESCRIPTION
+Void's runit init scripts print messages to the kernel message buffer at startup,
+marking when some procedures start and finish.
+.Nm
+prints a rough accounting of where time is spent during boot using these messages.
+.Nm
+may require superuser privileges to read from dmesg.
+The total time listed may not equal the sum of the other times,
+because it does not track the timing of every moment of the boot process.
+.Sh EXAMPLES
+.Bd -literal
+# runit-startuptime
+initramfs       0.646 s
+core-services   4.002 s
+  00-pseudofs           0.056 s
+  01-static-devnodes    1.178 s
+  02-kmods              0.027 s
+  02-udev               2.413 s
+  03-console-setup      0.096 s
+  03-filesystems        0.202 s
+  04-swap               0.004 s
+  05-misc               0.015 s
+  08-sysctl             0.008 s
+  20-screen             0.001 s
+  98-sbin-merge         0.000 s
+  99-cleanup            0.001 s
+rc.local        0.002 s
+total           7.952 s
+.Ed
+.Sh SEE ALSO
+.Xr runit-init 8
+.Sh AUTHOR
+.An classabbyamp ,
+.Mt void@placeviolette.net .
