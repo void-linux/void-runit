@@ -1,6 +1,6 @@
 # vim: set ts=4 sw=4 et:
 
-[ -n "$VIRTUALIZATION" ] && return 0
+[ -n "$IS_CONTAINER" ] && return 0
 
 msg "Remounting rootfs read-only..."
 LIBMOUNT_FORCE_MOUNT2=always mount -o remount,ro / || emergency_shell

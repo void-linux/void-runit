@@ -1,4 +1,4 @@
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     msg "Unmounting filesystems, disabling swap..."
     swapoff -a
     umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
@@ -8,7 +8,7 @@ fi
 
 sync
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     deactivate_vgs
     deactivate_crypt
 fi

@@ -1,4 +1,5 @@
 # *-*-shell-*-*
+# vim: set ts=4 sw=4 et:
 
 msg() {
     # bold
@@ -27,9 +28,12 @@ emergency_shell() {
     /bin/sh -l
 }
 
-detect_virt() {
-    # Detect LXC (and other) containers
-    [ -z "${container+x}" ] || export VIRTUALIZATION=1
+detect_container() {
+    # LXC, podman
+    [ -z "${container+x}" ] || export IS_CONTAINER=1
+
+    # backcompat
+    [ -n "$IS_CONTAINER" ] && export VIRTUALIZATION=1
 }
 
 deactivate_vgs() {

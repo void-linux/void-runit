@@ -3,7 +3,7 @@
 install -m0664 -o root -g utmp /dev/null /run/utmp
 halt -B  # for wtmp
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     msg "Seeding random number generator..."
     seedrng || true
 fi

@@ -4,7 +4,7 @@
 PATH=/usr/bin:/usr/sbin
 
 . /etc/runit/functions
-detect_virt
+detect_container
 [ -r /etc/rc.conf ] && . /etc/rc.conf
 echo
 for f in /etc/runit/shutdown.d/*.sh; do
