@@ -1,6 +1,6 @@
 # vim: set ts=4 sw=4 et:
 
-[ -n "$VIRTUALIZATION" ] && return 0
+[ -n "$IS_CONTAINER" ] && return 0
 
 if [ -x /usr/lib/systemd/systemd-udevd ]; then
     _udevd=/usr/lib/systemd/systemd-udevd

@@ -14,7 +14,7 @@ if [ -d /sys/firmware/efi/efivars ]; then
     mountpoint -q /sys/firmware/efi/efivars || mount -o nosuid,noexec,nodev -t efivarfs efivarfs /sys/firmware/efi/efivars
 fi
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
     _cgroupv1=""
     _cgroupv2=""
 
