@@ -31,6 +31,7 @@ emergency_shell() {
 detect_container() {
     # LXC, podman
     [ -z "${container+x}" ] || export IS_CONTAINER=1
+    [ -e /.dockerenv ] && export IS_CONTAINER=1
 
     # backcompat
     [ -n "$IS_CONTAINER" ] && export VIRTUALIZATION=1
