@@ -29,7 +29,7 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
         commonopts="";
         swapopts="";
         luksopts="";
-        for(i in opts) {
+        for (i in opts) {
             split(opts[i], para, "=");
             par=para[1];
             val=para[2];
@@ -52,6 +52,7 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
             #else if ( par == "timeout" )
             #else if ( par == "tmp" )
             else if ( par == "luks" ) use_luks="y";
+            else if ( par == "bitlk" ) use_bitlocker="y";
             else if ( par == "keyscript" ) {use_keyscript="y"; keyscript=val;}
             else if ( par == "keyslot" || par == "key-slot" ) luksopts=luksopts "-S " val " ";
             else if ( par == "keyfile-size" ) luksopts=luksopts "-l " val " ";
@@ -65,15 +66,17 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
                 print "option: " par " not supported " >"/dev/stderr";
                 makeswap="";
                 use_luks="";
+                use_bitlocker="";
                 use_keyscript="";
                 next;
             }
         }
-        if ( makeswap == "y" && use_luks != "y" ) {
+        if ( makeswap == "y" && use_luks != "y" && use_bitlocker != "y" ) {
             ccmd="cryptsetup " swapopts commonopts "-d " key " create " dest " " src;
             ccmd_2="mkswap /dev/mapper/" dest;
             makeswap="";
             use_luks=""; 
+            use_bitlocker="";
             use_keyscript="";
             system(ccmd);
             system(ccmd_2);
@@ -81,7 +84,8 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
             ccmd_2="";
             next;
         }
-        if ( use_luks == "y" && makeswap != "y" ){
+
+        if ( use_luks == "y" && makeswap != "y" && use_bitlocker != "y" ) {
             if ( use_keyscript == "y") {
                 ccmd=keyscript " | cryptsetup " luksopts commonopts "luksOpen -d - " src " " dest;
                 use_keyscript="";
@@ -95,12 +99,22 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
                 }
             }
         }
+        else if ( use_bitlocker == "y" && use_luks != "y" && makeswap != "y" ) {
+            if ( key == "none" ){
+                print "BitLocker requires a keyfile" >"/dev/stderr";
+                ccmd="";
+            }
+            else {
+                ccmd="cryptsetup " luksopts commonopts "-M bitlk open -d " key " " src " " dest;
+            }
+        }
         else {
-            print "use swap OR luks as option" >"/dev/stderr";
+            print "use swap OR luks OR bitlk as option" >"/dev/stderr";
             ccmd="";
         }
         makeswap="";
         use_luks="";
+        use_bitlocker="";
         use_keyscript="";
         if ( ccmd != ""){
             system(ccmd);
