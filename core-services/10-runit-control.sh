@@ -2,5 +2,5 @@
 
 # create files for controlling runit
 mkdir -p /run/runit
-install -m000 /dev/null /run/runit/stopit
-install -m000 /dev/null /run/runit/reboot
+install -m100 /dev/null /run/runit/stopit
+install -m100 /dev/null /run/runit/reboot
