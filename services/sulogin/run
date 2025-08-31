@@ -2,4 +2,4 @@
 [ -r conf ] && . ./conf
 read -r tty < /sys/class/tty/console/active
 tty=/dev/${tty##* }
-exec setsid sulogin ${OPTS:=-p} < $tty >$tty 2>&1
+exec chpst -P sulogin ${OPTS:=-p} < $tty >$tty 2>&1
