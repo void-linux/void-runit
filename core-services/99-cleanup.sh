@@ -1,5 +1,16 @@
 # vim: set ts=4 sw=4 et:
 
+# runsvchdir chokes if the current and/or previous symlinks are broken
+if [ -e /etc/runit/runsvdir/previous ]; then
+	rm /etc/runit/runsvdir/previous
+fi
+if [ -e /etc/runit/runsvdir/current ]; then
+	rm /etc/runit/runsvdir/current
+fi
+# Set the initial runlevel to 'default', even if a different one
+# is being selected through the kernel command line (see /etc/runit/2)
+ln -s default /etc/runit/runsvdir/current
+
 if [ ! -e /var/log/wtmp ]; then
 	install -m0664 -o root -g utmp /dev/null /var/log/wtmp
 fi
