@@ -21,6 +21,6 @@ fi
 
 if [ -n "$HARDWARECLOCK" ]; then
     msg "Setting up RTC to '${HARDWARECLOCK}'..."
-    TZ=$TIMEZONE hwclock --systz \
+    eval ${TIMEZONE:+TZ=$TIMEZONE} hwclock --systz \
         ${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z) --noadjfile} || emergency_shell
 fi
