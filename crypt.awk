@@ -3,7 +3,7 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
 {
     # decode the src variants
     split($2, o_src, "=")
-    if (o_src[1] == "UUID" || o_src[1] == "PARTUUID") ("blkid -l -o device -t " $2) | getline src;
+    if (o_src[1] == "UUID" || o_src[1] == "PARTUUID" || o_src[1] == "LABEL") ("blkid -l -o device -t " $2) | getline src;
     else src=o_src[1];
 
     # no password or none is given, ask fo it
