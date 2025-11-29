@@ -45,6 +45,7 @@ NF>4 { print "a valid crypttab has max 4 cols not " NF >"/dev/stderr"; next }
             else if ( par == "offset" ) swapopts=swapopts "-o " val " ";
             else if ( par == "skip" ) swapopts=swapopts "-p " val " ";
             else if ( par == "verify" ) swapopts=swapopts "-y ";
+            else if ( par == "sector-size" ) swapopts=swapopts "--sector-size " val " ";
             #else if ( par == "noauto" )
             #else if ( par == "nofail" )
             #else if ( par == "plain" )
