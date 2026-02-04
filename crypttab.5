@@ -1,0 +1,179 @@
+.TH CRYPTTAB 5
+.SH NAME
+crypttab \- Configuration for encrypted block devices
+.SH "SYNOPSIS"
+.PP
+\fI/etc/crypttab\fR
+.SH "DESCRIPTION"
+.PP
+The file \fBcrypttab\fR contains information about encrypted block devices
+that are getting setup during boot process.
+.PP
+Each line describes one encrypted block device and can have up to 4 fields but
+not less than 2 fields.  Fields on each line separated by tabs or spaces.
+Lines starting with '#' are comments and blank lines are ignored.
+.PP
+The first two fields are mandatory, the remaining two are optional. Each line
+has a form of:
+.sp
+.RS 4
+.NF
+\fIvolume\-name\fR \fIencrypted\-device\fR \fIkey\-file\fR \fIoptions\fR
+.RE
+.sp
+.nr step 0 1
+.nr PI 3n
+The four fields are:
+.IP \n+[step]
+The first field describes the name of the volume with decrypted data in
+\fI/dev/mapper\fR.
+.IP \n+[step]
+The second field describes the encrypted block device or file. It can be in a
+form of a filename, UUID=<uuid>\& or PARTUUID=<partuuid>\&.
+.IP \n+[step]
+The third field, if present, describes an absolute path to a file with the
+encryption key. If the field is empty a passphrase will be read interactively
+from the console.
+.IP \n+[step]
+The fourth field, if present, is a comma\-delimited list of options. See
+\fBSUPPORTED OPTIONS\fR\&.
+.SH SUPPORTED OPTIONS
+.PP
+\fBcipher=\fR<cipher>
+.RS 4
+Specify <cipher> encryption algorithm to use. See \fBcryptsetup\fR(8)\& and
+\fBcryptsetup \-c\fR\& for details. \fBcryptsetup \-\-help\fR\& has details about
+defaults.
+.RE
+.PP
+\fBdiscard\fR
+.RS 4
+Allow to use of discard (TRIM) requests for the device. Can have a negative
+security impact, please refer to \fBcryptsetup\-open(8)\fR.
+.sp
+Needs kernel 3.1 or later.
+.RE
+.PP
+\fBhash=\fR<hash>
+.RS 4
+Use <hash> as the passphrase hash. For more details refer to
+\fBcryptsetup\-open(8)\fR.\&
+.RE
+.PP
+\fBheader=\fR<device or file storing the LUKS header>
+.RS 4
+Use detached header metadata device or file. For more details refer to
+\fBcryprsetup\-open(8)\fR.
+.RE
+.PP
+\fBkeyfile\-offset=\fR<value>
+.RS 4
+Skip <value> bytes at the beginning of the key file.
+For more details refer to \fBcryptsetup\-open\fR(8).
+.RE
+.PP
+\fBkeyfile\-size=\fR<value>
+.RS 4
+Read a maximum of <value> bytes from the key file. The default is to read the
+whole file.
+For more details refer to \fBcryptsetup\-open(8)\fR.
+.RE
+.PP
+\fBkeyslot=\fR<0\-N>, \fBkey\-slot=\fR<0\-N>
+.RS 4
+Select a specific key\-slot to compare the passphrase against.
+For more details refer to \fBcryptsetup\-open\fR(8).\&
+.RE
+.PP
+\fBoffset=\fR<number of 512 byte sectors>
+.RS 4
+Start offset in the backend device in 512\-byte sectors.
+.RE
+.PP
+\fBread\-only\fR, \fBreadonly\fR
+.RS 4
+Set up readonly mapping.
+.RE
+.PP
+\fBskip=\fR<number of 512 byte sectors>
+.RS 4
+How many 512\-byte sectors of the encrypted data to skip at the beginning. For
+details refer to \fBcryptsetup\-open(8)\fR.\&
+.RE
+.PP
+\fBsize=\fR<number of 512 byte sectors>
+.RS 4
+Set the size of the device in sectors in 512\-bytes. This option is compatible
+only with \fIplain\fR device type.
+.RE
+.PP
+\fBluks\fR
+.RS 4
+Force LUKS mode. The following options are ignored: \fBcipher=\fR,
+\fBhash=\fR, \fBsize=\fR, \fBoffset=\fR, \fBskip=\fR, \fBverify\fR.
+.RE
+.PP
+\fBswap\fR
+.RS 4
+Force swap mode. The following options are ignored: \fBkeyslot=\fR,
+\fBkey\-slot=\fR, \fBkeyfile\-size=\fR, \fBkeyfile\-offset=\fR, \fBheader=\fR.
+For more details refer to \fBcryptsetup\-open(8)\fR section \fBPLAIN\fR.
+.RE
+.PP
+\fBtries=\fR<tries>
+.RS 4
+How many tries the user will have to input the correct passphrase.
+.RE
+.PP
+\fBverify\fR
+.RS 4
+When interactively asking for a passphrase, ask for it twice and complain if
+both inputs do not match.
+.RE
+.PP
+\fBperf\-same_cpu_crypt\fR
+.RS 4
+Perform encryption using the same CPU that IO was submitted on.
+.sp
+Needs kernel 4.0 or later.
+.RE
+.PP
+\fBperf\-submit_from_crypt_cpus\fR
+.RS 4
+Disable offloading writes to a separate thread after encryption.
+.sp
+Needs kernel 4.0 or later.
+.RE
+.PP
+\fBperf\-no_read_workqueue\fR
+.RS 4
+Bypass dm\-crypt internal workqueue and process read requests
+synchronously.
+.sp
+Needs kernel 5.9 or later.
+.RE
+.PP
+\fBperf\-no_write_workqueue\fR
+.RS 4
+Bypass dm\-crypt internal workqueue and process write requests
+synchronously.
+.sp
+Needs kernel 5.9 or later.
+.RE
+.SH "EXAMPLES"
+.PP
+.RS 4
+.nf
+# Encrypted LUKS with interactive password
+luks           UUID=2505567a\-9e27\-4efe\-a4d5\-15ad146c258b
+# Encrypted swap
+swap           /dev/sda7        /dev/urandom            swap
+# Encrypted LUKS with a key from a file
+storage        /dev/nvme1n1p1   /disk.key               discard,luks
+.RE
+.SH "SEE ALSO"
+.PP
+\fBfstab\fR(5),
+\fBcryptsetup\fR(8),
+\fBmkswap\fR(8),
+\fBmke2fs\fR(8)
