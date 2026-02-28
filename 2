@@ -3,11 +3,24 @@
 
 PATH=/usr/bin:/usr/sbin
 
+readproctitle='log: ...........................................................................................................................................................................................................................................................................................................................................................................................................'
+for arg in $(cat /proc/cmdline); do
+     case $arg in
+       'void.runit_readproctitle='* )
+           doreadproctitle="$(echo "${arg}" | cut -d'=' -f2)"
+           if [ "0" = "${doreadproctitle}" ]; then
+              echo 'runit readproctitle disabled: '"${arg}"' (via kernel cmdline)'
+              readproctitle=
+           fi
+       ;;
+     esac
+done
+
 runlevel=default
 for arg in $(cat /proc/cmdline); do
-    if [ -d /etc/runit/runsvdir/"$arg" ]; then
-        echo "Runlevel detected: '$arg' (via kernel cmdline)"
-        runlevel="$arg"
+    if [ -d /etc/runit/runsvdir/"${arg}" ]; then
+        echo 'runit runlevel detected: '"${arg}"' (via kernel cmdline)'
+        runlevel="${arg}"
     fi
 done
 
@@ -17,5 +30,11 @@ runsvchdir "${runlevel}"
 mkdir -p /run/runit/runsvdir
 ln -s /etc/runit/runsvdir/current /run/runit/runsvdir/current
 
-exec env - PATH=$PATH \
-    runsvdir -P /run/runit/runsvdir/current 'log: ...........................................................................................................................................................................................................................................................................................................................................................................................................'
+
+if [ -z "${readproctitle}" ]; then
+    exec env - PATH="${PATH}" \
+      runsvdir -P /run/runit/runsvdir/current
+else
+    exec env - PATH="${PATH}" \
+      runsvdir -P /run/runit/runsvdir/current "${readproctitle}"
+fi
