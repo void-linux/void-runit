@@ -56,6 +56,7 @@ case "$ZZZ_MODE" in
   noop) sleep 5;;
 esac
 
+ZZZ_MODE=resume
 for hook in /etc/zzz.d/resume/*; do
   [ -x "$hook" ] && "$hook"
 done
