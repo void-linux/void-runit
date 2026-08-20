@@ -115,9 +115,13 @@ Defines the
 .Pa ident
 which is used as prefix for each log message or passed as first argument to
 .Pa /etc/vlogger .
-The default is the
-.Ev LOGNAME
-environment variable.
+If not given, the default is an empty string when
+.Pa /etc/vlogger
+is used, or the result of
+.Xr getlogin 3
+when
+.Xr syslog 3
+is used directly.
 .It Ar message
 Write the
 .Ar message
