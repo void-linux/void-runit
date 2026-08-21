@@ -117,11 +117,20 @@ which is used as prefix for each log message or passed as first argument to
 .Pa /etc/vlogger .
 If not given, the default is an empty string when
 .Pa /etc/vlogger
-is used, or the result of
-.Xr getlogin 3
-when
+is used.
+When
 .Xr syslog 3
-is used directly.
+is used directly, the default is the result of
+.Xr getlogin 3 ,
+which on
+.Tn glibc
+always returns
+.Dv NULL
+(no tag) and on
+.Tn musl
+returns the value of the
+.Ev LOGNAME
+environment variable.
 .It Ar message
 Write the
 .Ar message
