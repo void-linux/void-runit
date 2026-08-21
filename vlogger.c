@@ -80,7 +80,7 @@ main(int argc, char *argv[])
 {
 	char buf[1024];
 	char *p, *argv0;
-	char *tag = NULL;
+	char *tag = getlogin();
 	int c;
 	int Sflag = 0;
 	int logflags = 0;
@@ -145,7 +145,7 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 
-	openlog(tag ? tag : getlogin(), logflags, facility);
+	openlog(tag, logflags, facility);
 
 	if (argc > 0) {
 		size_t len;
