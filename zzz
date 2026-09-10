@@ -44,7 +44,7 @@ flock -n 9 || fail "another instance of zzz is running"
 printf "Zzzz... "
 
 for hook in /etc/zzz.d/suspend/*; do
-  [ -x "$hook" ] && "$hook"
+  [ -x "$hook" ] && "$hook" 9<&-
 done
 
 case "$ZZZ_MODE" in
@@ -58,7 +58,7 @@ esac
 
 ZZZ_MODE=resume
 for hook in /etc/zzz.d/resume/*; do
-  [ -x "$hook" ] && "$hook"
+  [ -x "$hook" ] && "$hook" 9<&-
 done
 
 echo "yawn."
