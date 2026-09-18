@@ -36,7 +36,10 @@ case "$ZZZ_MODE" in
   hibernate) grep -q disk /sys/power/state || fail "hibernate not supported";;
 esac
 
-test -w /sys/power/state || fail "sleep permission denied"
+if ! [ -w /sys/power/state ] || {
+   ! [ -w /sys/power/disk ] && [ "$ZZZ_MODE" = hibernate ];}; then
+  fail "sleep permission denied"
+fi
 
 (
 flock -n 9 || fail "another instance of zzz is running"
