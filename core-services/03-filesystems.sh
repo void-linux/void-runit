@@ -2,6 +2,8 @@
 
 [ -n "$IS_CONTAINER" ] && return 0
 
+remote_fs_opt="noafs,nosshfs,nonfs,nonfs4,nosmbfs,nocifs,nocoda,noncp,noncpfs,noocfs2,nogfs,nogfs2,noglusterfs,nopvfs2,noocfs2,nolustre,noceph"
+
 msg "Remounting rootfs read-only..."
 LIBMOUNT_FORCE_MOUNT2=always mount -o remount,ro / || emergency_shell
 
@@ -67,7 +69,7 @@ done
 
 if [ -z "$FASTBOOT" ]; then
     msg "Checking filesystems:"
-    fsck -A -T -a -t noopts=_netdev $FORCEFSCK
+    fsck -A -T -a -t "${remote_fs_opt},noopts=_netdev" $FORCEFSCK
     if [ $? -gt 1 ]; then
         emergency_shell
     fi
@@ -77,4 +79,4 @@ msg "Mounting rootfs read-write..."
 LIBMOUNT_FORCE_MOUNT2=always mount -o remount,rw / || emergency_shell
 
 msg "Mounting all non-network filesystems..."
-mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev || emergency_shell
+mount -a -t "${remote_fs_opt}" -O no_netdev || emergency_shell
